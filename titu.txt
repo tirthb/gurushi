@@ -1,0 +1,10 @@
+Front:
+Title
+Welcome message
+Regular programs
+Contact
+
+Back:
+On chanting Hare Krishna
+Maha Mantra
+Map with El Camino
