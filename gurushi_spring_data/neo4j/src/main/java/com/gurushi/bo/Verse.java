@@ -37,10 +37,16 @@ public class Verse extends AbstractEntity {
 	@RelatedTo
 	private Translation translation;
 	
-	private DynamicProperties meanings = new PrefixedDynamicProperties("meanings");
+	private DynamicProperties meanings = new PrefixedDynamicProperties("meaning");
 	
 	@RelatedTo(type="COMMENTARY")
 	private Set<Commentary> commentaries = new HashSet<Commentary>();
+	
+	@RelatedTo(type="VIDEO")
+	private Set<Video> videos = new HashSet<Video>();
+	
+	@RelatedTo(type="AUDIO")
+	private Set<Audio> audios = new HashSet<Audio>();
 	
 	public Verse(String number, Chapter chapter) {
 		this.number = number;
@@ -104,6 +110,22 @@ public class Verse extends AbstractEntity {
 
 	public void addCommentary(Commentary commentary) {
 		commentaries.add(commentary);
+	}
+	
+	public Set<Video> getVideos() {
+		return Collections.unmodifiableSet(videos);
+	}
+	
+	public void addVideo(Video video) {
+		videos.add(video);
+	}
+	
+	public Set<Audio> getAudios() {
+		return Collections.unmodifiableSet(audios);
+	}
+	
+	public void addAudio(Audio audio) {
+		audios.add(audio);
 	}
 	
 	public Verse getNextVerse() {
