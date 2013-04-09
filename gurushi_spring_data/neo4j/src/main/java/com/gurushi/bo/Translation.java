@@ -16,6 +16,8 @@ public class Translation extends AbstractEntity {
 	public Translation(Author author) {
 		this.author = author;
 	}
+	
+	public Translation() {}
 
 	public String getText() {
 		return text;

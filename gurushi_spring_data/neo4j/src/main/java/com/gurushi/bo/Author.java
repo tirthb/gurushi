@@ -13,6 +13,8 @@ public class Author extends AbstractEntity {
 	public Author(String name) {
 		this.name = name;
 	}
+	
+	public Author() {}
 
 	public String getName() {
 		return name;

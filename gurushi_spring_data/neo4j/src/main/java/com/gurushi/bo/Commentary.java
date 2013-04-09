@@ -17,6 +17,8 @@ public class Commentary extends AbstractEntity {
 		this.sourceUrl = sourceUrl;
 		this.author = author;
 	}
+	
+	public Commentary() {}
 
 	public String getText() {
 		return text;

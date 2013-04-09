@@ -23,6 +23,8 @@ public class Scripture extends AbstractEntity {
 		this. name = name;
 	}
 	
+	public Scripture() {}
+	
 	public String getName() {
 		return name;
 	}

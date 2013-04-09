@@ -52,6 +52,8 @@ public class Verse extends AbstractEntity {
 		this.number = number;
 		this.chapter = chapter;
 	}
+	
+	public Verse() {}
 
 	public Chapter getChapter() {
 		return chapter;

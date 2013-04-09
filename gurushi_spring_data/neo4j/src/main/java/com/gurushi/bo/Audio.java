@@ -8,6 +8,13 @@ public class Audio extends AbstractEntity {
 	private String title;
 	private String url;
 	
+	public Audio(String title, String url) {
+		this.title = title;
+		this.url = url;
+	}
+	
+	public Audio() {}
+	
 	public String getTitle() {
 		return title;
 	}
