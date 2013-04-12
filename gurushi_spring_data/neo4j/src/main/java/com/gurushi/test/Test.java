@@ -1,11 +1,11 @@
 package com.gurushi.test;	
 
-import com.gurushi.bo.Author;
-import com.gurushi.bo.Chapter;
-import com.gurushi.bo.Commentary;
-import com.gurushi.bo.Scripture;
-import com.gurushi.bo.Translation;
-import com.gurushi.bo.Verse;
+import com.gurushi.data.Author;
+import com.gurushi.data.Chapter;
+import com.gurushi.data.Commentary;
+import com.gurushi.data.Scripture;
+import com.gurushi.data.Translation;
+import com.gurushi.data.Verse;
 
 public class Test {
 	
@@ -24,13 +24,11 @@ public class Test {
 		c1.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
 		
 		Chapter c2 = new Chapter("-1", "Introduction", gita);
-		c2.setPreviousChapter(c1);
 		c1.setNextChapter(c2);
 		
 		c2.setDescription("Bhagavad-gītā is also known as Gītopaniṣad. It is the essence of Vedic knowledge and one of the most important Upaniṣads in Vedic literature.");
 		
 		Chapter c3 = new Chapter("1", "Observing the Armies on the Battlefield of Kurukṣetra", gita);
-		c3.setPreviousChapter(c2);
 		c2.setNextChapter(c3);
 		
 		Verse v = new Verse("1", c3);

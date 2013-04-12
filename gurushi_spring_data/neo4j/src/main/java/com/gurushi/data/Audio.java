@@ -1,19 +1,19 @@
-package com.gurushi.bo;
+package com.gurushi.data;
 
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 @NodeEntity
-public class Video extends AbstractEntity {
+public class Audio extends AbstractEntity {
 	
 	private String title;
 	private String url;
 	
-	public Video(String title, String url) {
+	public Audio(String title, String url) {
 		this.title = title;
 		this.url = url;
 	}
 	
-	public Video() {}
+	public Audio() {}
 	
 	public String getTitle() {
 		return title;
@@ -30,7 +30,7 @@ public class Video extends AbstractEntity {
 	
 	@Override
 	public String toString() {
-		return String.format("vdo:%s", title);
+		return String.format("audio:%s", title);
 	}
 
 }

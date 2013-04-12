@@ -13,35 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gurushi.bo;
+package com.gurushi.data.repository;
 
-import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.repository.CypherDslRepository;
+import org.springframework.data.neo4j.repository.GraphRepository;
 
-public abstract class AbstractEntity {
+import com.gurushi.data.Chapter;
 
-	@GraphId
-	private Long id;
-
-	public Long getId() {
-		return id;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-
-		if (this == obj) {
-			return true;
-		}
-
-        if (id == null || obj == null || !getClass().equals(obj.getClass())) {
-            return false;
-        }
-        return id.equals(((AbstractEntity) obj).id);
-
-    }
-
-	@Override
-	public int hashCode() {
-		return id == null ? 0 : id.hashCode();
-	}
+public interface ChapterRepository extends GraphRepository<Chapter>, CypherDslRepository<Chapter> {
+	
 }

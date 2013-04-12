@@ -1,0 +1,17 @@
+//get all nodes
+
+START n=node(*)
+return n;
+
+//remove all nodes and relationships without the super node
+
+START n=node(*) 
+MATCH n-[r?]-()
+WHERE ID(n) <> 0
+DELETE n, r;
+
+//remove orphan nodes
+
+START n=node(*)
+WHERE not(n-[*..2]-())
+DELETE n;

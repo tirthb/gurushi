@@ -1,4 +1,4 @@
-package com.gurushi.bo;
+package com.gurushi.data;
 
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;

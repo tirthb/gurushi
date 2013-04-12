@@ -1,4 +1,4 @@
-package com.gurushi.bo;
+package com.gurushi.data;
 
 import java.util.Collections;
 import java.util.HashSet;

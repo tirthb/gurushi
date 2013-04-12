@@ -1,4 +1,4 @@
-package com.gurushi.bo;
+package com.gurushi.data;
 
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -21,9 +21,6 @@ public class Chapter extends AbstractEntity {
 	//some chapters will be description only, for example introduction
 	@Indexed(indexType = IndexType.FULLTEXT,indexName = "chapter_search")
 	private String description;
-	
-	@RelatedTo
-	private Chapter previousChapter;
 	
 	@RelatedTo
 	private Chapter nextChapter;
@@ -56,14 +53,6 @@ public class Chapter extends AbstractEntity {
 		this.description = description;
 	}
 	
-	public Chapter getPreviousChapter() {
-		return previousChapter;
-	}
-
-	public void setPreviousChapter(Chapter previousChapter) {
-		this.previousChapter = previousChapter;
-	}
-
 	public Chapter getNextChapter() {
 		return nextChapter;
 	}
