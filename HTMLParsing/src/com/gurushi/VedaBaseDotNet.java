@@ -152,9 +152,16 @@ public class VedaBaseDotNet {
 		List<Element> p_t_nodes = root.select("p.t");		
 		List<Element> purport = new ArrayList<Element>();
 		if (p_t_nodes.size() >= 3) {
-		  Element trans = p_t_nodes.get(2).nextElementSibling();
+		  Element trans = p_t_nodes.get(2).nextElementSibling();			
 		  purport.add(trans);
-		  return(parseContent(purport, "<p>", "</p>"));
+		  
+		  Element nextElement = trans;
+		  while ((nextElement = trans.nextElementSibling()) != null) {
+			 if (nextElement.hasClass("l")) break;
+			 trans = nextElement;
+		     purport.add(trans);
+		  }
+		  return(parseContent(purport, "\n<p>", "</p>"));
 		}        
 		return "";
 	}
