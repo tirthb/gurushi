@@ -1,6 +1,7 @@
 package com.gurushi;
 
 import java.io.File;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
@@ -15,24 +16,52 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.lang.String;
+import java.util.Iterator;
 
-public class BhagavadGitaDotOrg {
+public class VedaBaseDotNet {
 	File rootDir;
 
-	public BhagavadGitaDotOrg(File dir) {
+	public VedaBaseDotNet(File dir) {
 		rootDir = dir;
 	}
 
 	private List<Element> GetMatchingChilds(Element parent, String tag) {
 		List<Element> found = new ArrayList<Element>();;
 		Elements children = parent.children();
+		
+		int flag = 0;
+		
+		parent.childNodes().size();
+		
+		for (Element child : children) {
+		  //print("Child tag " + child.tagName());
+		  if (tag == null || (tag != null && child.tagName().matches(tag))) {
+			  found.add(child);
+			  flag = 1;
+		  }		  
+	
+		}
+		if(flag == 0) {
+		  print("FATAL ERROR: could not find the right tag: " + tag + "\n");
+		  return found;				
+		}
+		
+		return found;
+		
+	}
+	
+	private List<Element> GetMatchingChildsRange(Element parent, String tag, int start, int end) {
+		List<Element> found = new ArrayList<Element>();;
+		Elements children = parent.children();
 		int flag = 0;
 		
 		for (Element child : children) {
 		  //print("Child tag " + child.tagName());
-		  if (child.tagName().matches(tag)) {
-			  found.add(child);
-			  flag = 1;
+		  if (child.tagName().matches(tag)) {			  
+			  flag++;
+			  if (flag >= start && flag <=end) {
+			    found.add(child);
+			  }
 		  }
 		}
 		if(flag == 0) {
@@ -66,6 +95,70 @@ public class BhagavadGitaDotOrg {
 		return found;
 		
 	}
+	
+	private String getChapterTitle(Element root) {
+		
+		Elements trs = root.select("tbody > tr");
+		Elements tds = trs.get(0).select("td");
+		Elements as = tds.get(0).select("a");
+		
+		
+		return as.get(0).text();		
+		
+	}
+	
+	private String parseContent(List<Element> ps, String sep_begin, String sep_end) {
+		String content = "";
+		for (int i = 0; i < ps.size(); i++) {
+			String html = ps.get(i).html();
+			String html_text = Jsoup.parse(html).text();		
+			content = content + sep_begin + html_text + sep_end;	
+
+		}		
+		return content;		
+	}
+	
+	private String getVerse(Element root) {   		
+		
+		List<Element> verse_nodes = root.select("p.c");
+		return(parseContent(verse_nodes, "<p>", "</p>"));				
+	}
+	
+	private String getSynonyms(Element root) {
+   		
+		List<Element> p_t_nodes = root.select("p.t");		
+		List<Element> syn = new ArrayList<Element>();
+		if (p_t_nodes.get(0) != null) {
+		  Element trans = p_t_nodes.get(0).nextElementSibling();
+		  syn.add(trans);
+		  return(parseContent(syn, "<p>", "</p>"));
+		}        
+		return "";		
+	}
+	
+    private String getTranslation(Element root) {
+		List<Element> p_t_nodes = root.select("p.t");		
+		List<Element> trans = new ArrayList<Element>();
+		if (p_t_nodes.get(1) != null) {
+		  Element translation = p_t_nodes.get(1).nextElementSibling();
+		  trans.add(translation);
+		  return(parseContent(trans, "<p>", "</p>"));
+		}        
+		return "";
+   		
+	}
+    
+    private String getPurport(Element root) {
+		List<Element> p_t_nodes = root.select("p.t");		
+		List<Element> purport = new ArrayList<Element>();
+		if (p_t_nodes.size() >= 3) {
+		  Element trans = p_t_nodes.get(2).nextElementSibling();
+		  purport.add(trans);
+		  return(parseContent(purport, "<p>", "</p>"));
+		}        
+		return "";
+	}
+    
 	private void processHTML(String file) {
 		File input = new File(file);
 		Document doc;
@@ -73,14 +166,32 @@ public class BhagavadGitaDotOrg {
 			doc = Jsoup.parse(input, "UTF-8", "");
 
 			Elements tables = doc.select("table");
-			System.out.println(tables.size());
+			//System.out.println(tables.size());
 			
 			//Elements table_children = doc.select("table table");
-			Elements table_children = doc.select("body > table");
+			//Elements table_children = doc.select("body > table");
 			
 			//Elements table_children.get(1)
-			System.out.println(table_children.size());
-			System.out.println(table_children.get(1).html());
+			//System.out.println(tables.size());
+			//System.out.println(tables.get(0).html());
+			
+			String title = getChapterTitle(tables.get(0));
+			System.out.println("Title: \n" + title);
+			
+			
+			String verse = getVerse(doc.select("body").get(0));
+			System.out.println("Verse: \n" + verse);
+
+			String trans = getTranslation(doc.select("body").get(0));
+			System.out.println("Translation: \n" + trans);
+
+			String synonyms = getSynonyms(doc.select("body").get(0));
+			System.out.println("Synonyms: \n" + synonyms);
+			
+			String purport = getPurport(doc.select("body").get(0));
+			System.out.println("Purport: \n" + purport);
+
+			
 			//tables.removeAll(table_children);
 			//System.out.println(tables.size());
 			
@@ -89,7 +200,8 @@ public class BhagavadGitaDotOrg {
 			//Element html = FindNthChild(doc, "html", 1);
 			//Element body = FindNthChild(html, "body", 1);
 			//Element table = FindNthChild(body, "table", 2);
-			Element tbody = FindNthChild(table_children.get(1), "tbody", 1);
+			/*
+			Element tbody = FindNthChild(tables.get(1), "tbody", 1);
 			List<Element> trs = GetMatchingChilds(tbody, "tr");
 			
 			//List<Element> trs = GetMatchingChilds(, "tr");
@@ -112,7 +224,7 @@ public class BhagavadGitaDotOrg {
 			
 			Element commentary4 = FindNthChild(commentaries34_td.get(1), "center", 1); 
 			print("Commentary 4: " + commentary4.text());
-			
+			*/
 			
 			
 		    
@@ -139,12 +251,7 @@ public class BhagavadGitaDotOrg {
 			int chapter;
 			for (chapter = 1; chapter <= 18; chapter++) {
 				for (int verse = 1;; verse++) {
-					NumberFormat myFormat = NumberFormat.getInstance();
-					myFormat.setMinimumIntegerDigits(2);
-					String chapter_s = myFormat.format(chapter);
-					String verse_s = myFormat.format(verse);
-					String verse_file = rootDir + "/verse-" + chapter_s + "-"
-							+ verse_s + ".html";
+					String verse_file = rootDir + "/" + chapter + "/" + verse + "/en";
 					// System.out.println("file:" + verse_file);
 					File file = new File(verse_file);
 					
@@ -154,8 +261,9 @@ public class BhagavadGitaDotOrg {
 					System.out.println(file.getCanonicalPath());
 					processHTML(verse_file);					
 					//processHTML("F:/Dropbox/www.bhagavad-gita.org/Gita/test.html");
-					
-					//return;
+					//if (verse == 10) {
+					  //return;
+					//}
 				}
 			}
 		} catch (IOException e) {
