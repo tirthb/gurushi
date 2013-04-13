@@ -39,6 +39,8 @@ public class ChapterTest extends AbstractIntegrationTest {
 	ScriptureService scService;
 	
 	private Scripture gita;
+	
+	private Chapter chPreface, chIntro;
 
 	@Test
 	public void createChapters() {
@@ -46,14 +48,14 @@ public class ChapterTest extends AbstractIntegrationTest {
 		gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
 		
-		Chapter chPreface = new Chapter(null, "Preface", gita);
+		chPreface = new Chapter(null, "Preface", gita);
 		gita.setFirstChapter(chPreface);
 		
 		chPreface.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
 		
 		chPreface = service.save(chPreface);
 		
-		Chapter chIntro = new Chapter(null, "Introduction", gita);
+		chIntro = new Chapter(null, "Introduction", gita);
 		chIntro.setDescription("Bhagavad-gītā is also known as Gītopaniṣad. It is the essence of Vedic knowledge and one of the most important Upaniṣads in Vedic literature.");
 		chIntro = service.save(chIntro);
 		
@@ -79,5 +81,23 @@ public class ChapterTest extends AbstractIntegrationTest {
 		for (Chapter chapter : chapters) {
 			Assert.assertNotNull(chapter.getId());
 		}
+	}
+	
+	@Test
+	public void getPreviousChapter() {
+		
+		createChapters();
+		
+		Chapter current = service.findByTitleAndScripture(chIntro.getTitle(), chIntro.getScripture());
+		
+		Chapter previous = service.previousChapter(current);
+		
+		Assert.assertEquals(chPreface, previous);
+		
+		current = previous;
+		
+		previous = service.previousChapter(current);
+		
+		Assert.assertNull(previous);
 	}
 }

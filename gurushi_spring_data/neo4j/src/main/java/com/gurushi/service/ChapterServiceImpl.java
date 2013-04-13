@@ -35,4 +35,14 @@ public class ChapterServiceImpl implements ChapterService {
 		return chapters;
 	}
 
+	@Override
+	public Chapter previousChapter(Chapter c) {
+		return rep.previousChapter(c);
+	}
+
+	@Override
+	public Chapter findByTitleAndScripture(String title, Scripture s) {
+		return rep.findByTitleAndScripture(title, s);
+	}
+
 }

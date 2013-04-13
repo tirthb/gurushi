@@ -17,7 +17,7 @@ public class Chapter extends AbstractEntity {
 	private String number;
 	
 	@Indexed
-	private String name;
+	private String title;
 	
 	//some chapters will be description only, for example introduction
 	@Indexed(indexType = IndexType.FULLTEXT,indexName = "chapter_search")
@@ -31,20 +31,20 @@ public class Chapter extends AbstractEntity {
 	@RelatedTo
 	private Verse firstVerse;
 	
-	public Chapter(String number, String name, Scripture scripture) {
+	public Chapter(String number, String title, Scripture scripture) {
 		this.number = number;
-		this.name = name;
+		this.title = title;
 		this.scripture = scripture;
 	}
 	
 	public Chapter() {}
 	
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 	
 	public String getDescription() {
@@ -83,39 +83,8 @@ public class Chapter extends AbstractEntity {
 		return scripture;
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
-		result = prime * result
-				+ ((scripture == null) ? 0 : scripture.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Chapter other = (Chapter) obj;
-		if (number == null) {
-				return false;
-		} else if (!number.equals(other.number))
-			return false;
-		if (scripture == null) {
-				return false;
-		} else if (!scripture.equals(other.scripture))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		return String.format("Chapter %s - %s of %s", name, number, scripture);
+		return String.format("Chapter(%d) %s", getId(), title);
 	}
 	
 }
