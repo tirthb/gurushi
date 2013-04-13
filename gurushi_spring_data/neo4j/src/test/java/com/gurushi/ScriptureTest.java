@@ -15,8 +15,6 @@
  */
 package com.gurushi;
 
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +28,18 @@ import com.gurushi.service.ScriptureService;
  * Integration tests for {@link ChapterService}.
  * 
  */
-public class ChapterTest extends AbstractIntegrationTest {
+public class ScriptureTest extends AbstractIntegrationTest {
 
 	@Autowired
-	ChapterService service;
+	ChapterService chservice;
 	
 	@Autowired
-	ScriptureService scService;
+	ScriptureService service;
 	
 	private Scripture gita;
 
 	@Test
-	public void createChapters() {
+	public void createScripture() {
 
 		gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
@@ -51,33 +49,17 @@ public class ChapterTest extends AbstractIntegrationTest {
 		
 		chPreface.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
 		
-		chPreface = service.save(chPreface);
-		
-		Chapter chIntro = new Chapter(null, "Introduction", gita);
-		chIntro.setDescription("Bhagavad-gītā is also known as Gītopaniṣad. It is the essence of Vedic knowledge and one of the most important Upaniṣads in Vedic literature.");
-		chIntro = service.save(chIntro);
-		
-		chPreface.setNextChapter(chIntro);
-		chPreface = service.save(chPreface);
-		
-		Chapter c1 = new Chapter("1", "Observing the Armies on the Battlefield of Kurukṣetra", gita);
-		c1 = service.save(c1);
-		
-		chIntro.setNextChapter(c1);
-		chIntro = service.save(chIntro);
+		chPreface = chservice.save(chPreface);
 	}
 	
 	@Test
-	public void getAllChaptersForScripture() {
-		createChapters();
+	public void getScriptureByName() {
 		
-		Scripture s = scService.findByName(gita.getName());
-		List<Chapter> chapters = service.getAllChaptersForAScripture(s);
+		createScripture();
 		
-		Assert.assertEquals(3, chapters.size());
+		Scripture s = service.findByName(gita.getName());
 		
-		for (Chapter chapter : chapters) {
-			Assert.assertNotNull(chapter.getId());
-		}
+		Assert.assertEquals(gita.getId(), s.getId());
+		Assert.assertEquals(gita.getFirstChapter(), s.getFirstChapter());
 	}
 }
