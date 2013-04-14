@@ -28,12 +28,16 @@ public class VedaBaseDotNet {
 	
 	Scripture sc;
 	Author author;
+	
+	List<Chapter> chapter_list;
 
 	public VedaBaseDotNet(File dir) {
 		rootDir = dir;
 		sc = new Scripture("Bhagavad Gita As It Is");
 		author = new Author();
 		author.setName("His Grace Srila Prabhupada");
+		chapter_list = new ArrayList<Chapter>();
+		createChapterLinks();
 	}
 
 	private List<Element> GetMatchingChilds(Element parent, String tag) {
@@ -142,7 +146,7 @@ public class VedaBaseDotNet {
 		if (p_t_nodes.get(0) != null) {
 		  Element trans = p_t_nodes.get(0).nextElementSibling();
 		  syn.add(trans);
-		  return(parseContent(syn, "<p>", "</p>"));
+		  return(parseContent(syn, "", ""));
 		}        
 		return "";		
 	}
@@ -177,7 +181,7 @@ public class VedaBaseDotNet {
 		return "";
 	}
     
-	private void processHTML(String file) {
+	private void processHTML(Chapter ch, String file) {
 		File input = new File(file);
 		Document doc;
 		try {
@@ -185,24 +189,39 @@ public class VedaBaseDotNet {
 
 			Elements tables = doc.select("table");
 
-			String title = getChapterTitle(tables.get(0));
-			System.out.println("Title: \n" + title);
+			//String title = getChapterTitle(tables.get(0));
+			//System.out.println("Title: \n" + title);
 			
-			String verse = getVerse(doc.select("body").get(0));
-			System.out.println("Verse: \n" + verse);
-
-			String trans = getTranslation(doc.select("body").get(0));
-			System.out.println("Translation: \n" + trans);
+			Verse verse = new Verse(getVerse(doc.select("body").get(0)), ch);
+			System.out.println("Verse: \n" + verse.getText());
+			
+			
+			Translation trans = new Translation(author);
+			trans.setText(getTranslation(doc.select("body").get(0)));
+			
+			System.out.println("Translation: \n" + trans.getText());
 
 			String synonyms = getSynonyms(doc.select("body").get(0));
-			System.out.println("Synonyms: \n" + synonyms);
+			String[] words = synonyms.split(";");
+			for (int i = 0; i < words.length; i++) {
+				System.out.println("Word = " + words[i]);
+				String word[] = words[i].split(" — ");
+				System.out.println("Word = " + word[0] + " " + word[1]);
+				verse.setMeaning(word[0], word[1]);
+			}
 			
-			String purport = getPurport(doc.select("body").get(0));
-			System.out.println("Purport: \n" + purport);
+			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), "", author);
+			verse.addCommentary(purport);	
+					
+			System.out.println("Purport: \n" + purport.getText());
+			
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		sc.setFirstChapter(chapter_list.get(0));
 	}
 
 	private static void print(String msg, Object... args) {
@@ -215,21 +234,36 @@ public class VedaBaseDotNet {
 		else
 			return s;
 	}
-/*
-	private createChapterLinks() {
+
+	private void createChapterLinks() {
 		int chapter;
+		Chapter ch;
+		Chapter previous_chapter = null;
+		Document doc;
 		for (chapter = 1; chapter <= 18; chapter++) {
 			String first_verse = rootDir + "/" + 1 + "/" + 1 + "/en";
 			File input = new File(first_verse);
-			Document doc = Jsoup.parse(input, "UTF-8", "");
-			String title = getChapterTitle(doc);
+			try {
+				doc = Jsoup.parse(input, "UTF-8", "");
+				
+				String title = getChapterTitle(doc);
+				
+				ch = new Chapter(Integer.toString(chapter), title, sc);
+				chapter_list.add(ch);
+				
+				if (previous_chapter != null) {
+				  previous_chapter.setNextChapter(ch);
+				}
+				previous_chapter = ch;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
-			Chapter ch = new Chapter(chapter, title, sc);
 		}		
 		
 		
 	}
-	*/
+	
 	
 	public void loadData() {
 		try {
@@ -243,6 +277,7 @@ public class VedaBaseDotNet {
 				
 				Chapter ch = new Chapter(chapter, title, sc);
 				*/
+				Chapter ch = chapter_list.get(chapter - 1);
 				for (int verse = 1;; verse++) {
 					String verse_file = rootDir + "/" + chapter + "/" + verse + "/en";
 					// System.out.println("file:" + verse_file);
@@ -253,7 +288,8 @@ public class VedaBaseDotNet {
 					
 					System.out.println(file.getCanonicalPath());
 					//processHTML(verse_file, chapter, verse);	
-					processHTML(verse_file);	
+					processHTML(ch, verse_file);
+					//if (verse == 1) return;
 					
 				}
 			}
