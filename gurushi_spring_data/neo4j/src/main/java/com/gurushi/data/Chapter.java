@@ -29,6 +29,7 @@ public class Chapter extends AbstractEntity {
 	
 	//all chapters need not have verses, for example introduction
 	@RelatedTo
+	@Fetch
 	private Verse firstVerse;
 	
 	public Chapter(String number, String title, Scripture scripture) {

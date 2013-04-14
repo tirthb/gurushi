@@ -28,10 +28,6 @@ public class Verse extends AbstractEntity {
 	@RelatedTo
 	private Verse nextVerse;
 	
-	@Fetch
-	@RelatedTo
-	private Verse previousVerse;
-	
 	//restricting to one translation per verse for less confusion
 	@Fetch
 	@RelatedTo
@@ -136,14 +132,6 @@ public class Verse extends AbstractEntity {
 
 	public void setNextVerse(Verse nextVerse) {
 		this.nextVerse = nextVerse;
-	}
-
-	public Verse getPreviousVerse() {
-		return previousVerse;
-	}
-
-	public void setPreviousVerse(Verse previousVerse) {
-		this.previousVerse = previousVerse;
 	}
 
 	@Override
