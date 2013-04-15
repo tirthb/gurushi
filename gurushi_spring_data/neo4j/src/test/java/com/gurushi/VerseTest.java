@@ -77,8 +77,8 @@ public class VerseTest extends AbstractIntegrationTest {
 				, "http://www.bhagavad-gita.org/Gita/verse-01-01.html"
 				, a3));
 		
-		v1.setMeaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said");
-		v1.setMeaning("dharma-kṣetre", "in the place of pilgrimage");
+		v1.addMeaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said");
+		v1.addMeaning("dharma-kṣetre", "in the place of pilgrimage");
 		
 		v1.addAudio(new Audio("SP BG 01-01 London 1973-07-07 The Material World Means--etc", 
 				"http://audio.iskcondesiretree.info/01_-_His_Divine_Grace_A_C_Bhaktivedanta_Swami_Srila_Prabhupada/Lectures/English/Bhagavad_Gita/Chapter-01/SP_BG_01-01_London_1973-07-07_The_Material_World_Means--etc.mp3"));

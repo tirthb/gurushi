@@ -206,7 +206,7 @@ public class VedaBaseDotNet {
 				//System.out.println("Word = " + words[i]);
 				String word[] = words[i].split(" — ");
 				System.out.println(word[0] + " - " + word[1]);
-				verse.setMeaning(word[0], word[1]);
+				verse.addMeaning(word[0], word[1]);
 			}
 			
 			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), "http://vedabase.net/bg/" + ch.getNumber() + "/" + verse.getNumber() + "en", author);

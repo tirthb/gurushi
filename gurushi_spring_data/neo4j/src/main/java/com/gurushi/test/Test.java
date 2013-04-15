@@ -56,7 +56,7 @@ public class Test {
 						, "http://bg.net/something"
 						, a));
 		
-		v.setMeaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said");
+		v.addMeaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said");
 		
 		//set next previous verse
 		

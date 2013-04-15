@@ -86,7 +86,7 @@ public class Verse extends AbstractEntity {
 		return meanings;
 	}
 
-	public void setMeaning(String word, String meaning) {
+	public void addMeaning(String word, String meaning) {
 		this.meanings.setProperty(word, meaning);
 	}
 	
