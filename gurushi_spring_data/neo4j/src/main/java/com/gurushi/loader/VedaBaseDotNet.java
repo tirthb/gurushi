@@ -35,7 +35,7 @@ public class VedaBaseDotNet {
 		rootDir = dir;
 		sc = new Scripture("Bhagavad Gita As It Is");
 		author = new Author();
-		author.setName("His Grace Srila Prabhupada");
+		author.setName("His Grace Bhakti Vedanta Swami Srila Prabhupada");
 		chapter_list = new ArrayList<Chapter>();
 		createChapterLinks();
 	}
@@ -176,41 +176,40 @@ public class VedaBaseDotNet {
 			 trans = nextElement;
 		     purport.add(trans);
 		  }
-		  return(parseContent(purport, "\n<p>", "</p>"));
+		  return(parseContent(purport, "<p>", "</p>"));
 		}        
 		return "";
 	}
     
-	private void processHTML(Chapter ch, String file) {
+	private void processVerse(Chapter ch, Verse verse, String file) {
 		File input = new File(file);
 		Document doc;
 		try {
 			doc = Jsoup.parse(input, "UTF-8", "");
-
-			Elements tables = doc.select("table");
-
-			//String title = getChapterTitle(tables.get(0));
-			//System.out.println("Title: \n" + title);
 			
-			Verse verse = new Verse(getVerse(doc.select("body").get(0)), ch);
+			verse.setText(getVerse(doc.select("body").get(0)));
 			System.out.println("Verse: \n" + verse.getText());
 			
 			
 			Translation trans = new Translation(author);
 			trans.setText(getTranslation(doc.select("body").get(0)));
 			
+			verse.setTranslation(trans);
+			
 			System.out.println("Translation: \n" + trans.getText());
 
 			String synonyms = getSynonyms(doc.select("body").get(0));
 			String[] words = synonyms.split(";");
+			
+			System.out.println("Synonyms:");
 			for (int i = 0; i < words.length; i++) {
-				System.out.println("Word = " + words[i]);
+				//System.out.println("Word = " + words[i]);
 				String word[] = words[i].split(" — ");
-				System.out.println("Word = " + word[0] + " " + word[1]);
+				System.out.println(word[0] + " - " + word[1]);
 				verse.setMeaning(word[0], word[1]);
 			}
 			
-			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), "", author);
+			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), "http://vedabase.net/bg/" + ch.getNumber() + "/" + verse.getNumber() + "en", author);
 			verse.addCommentary(purport);	
 					
 			System.out.println("Purport: \n" + purport.getText());
@@ -268,28 +267,35 @@ public class VedaBaseDotNet {
 	public void loadData() {
 		try {
 			int chapter;
+			Verse current_verse_obj = null;
+			Verse previous_verse_obj = null;
 			for (chapter = 1; chapter <= 18; chapter++) {
-				/*
-				String first_verse = rootDir + "/" + 1 + "/" + 1 + "/en";
-				File input = new File(first_verse);
-				Document doc = Jsoup.parse(input, "UTF-8", "");
-				String title = getChapterTitle(doc);
-				
-				Chapter ch = new Chapter(chapter, title, sc);
-				*/
+	
 				Chapter ch = chapter_list.get(chapter - 1);
-				for (int verse = 1;; verse++) {
-					String verse_file = rootDir + "/" + chapter + "/" + verse + "/en";
-					// System.out.println("file:" + verse_file);
+				
+				for (int verse_num = 1;; verse_num++) {
+					String verse_file = rootDir + "/" + chapter + "/" + verse_num + "/en";
 					File file = new File(verse_file);
-					//File file = new File("F:/Dropbox/www.bhagavad-gita.org/Gita/test.html");
 					if (!file.exists())
 						break;
 					
-					System.out.println(file.getCanonicalPath());
-					//processHTML(verse_file, chapter, verse);	
-					processHTML(ch, verse_file);
-					//if (verse == 1) return;
+					System.out.println("File Being Processed: " + file.getCanonicalPath());
+					System.out.println("Chapter = " + chapter + " Verse = " + verse_num);
+					
+					current_verse_obj = new Verse(Integer.toString(verse_num), ch);
+					
+					if (verse_num == 1) {
+						ch.setFirstVerse(current_verse_obj);
+					}
+
+					processVerse(ch, current_verse_obj, verse_file);
+					
+					if (previous_verse_obj != null) {
+						previous_verse_obj.setNextVerse(current_verse_obj);
+						previous_verse_obj = current_verse_obj;
+					}
+					System.out.println();
+					if (verse_num == 3) return;
 					
 				}
 			}
