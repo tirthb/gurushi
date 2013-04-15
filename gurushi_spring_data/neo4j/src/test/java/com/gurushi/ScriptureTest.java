@@ -31,9 +31,6 @@ import com.gurushi.service.ScriptureService;
 public class ScriptureTest extends AbstractIntegrationTest {
 
 	@Autowired
-	ChapterService chservice;
-	
-	@Autowired
 	ScriptureService service;
 	
 	private Scripture gita;
@@ -49,7 +46,7 @@ public class ScriptureTest extends AbstractIntegrationTest {
 		
 		chPreface.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
 		
-		chPreface = chservice.save(chPreface);
+		chPreface = chService.save(chPreface);
 	}
 	
 	@Test

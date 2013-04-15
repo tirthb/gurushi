@@ -35,12 +35,15 @@ public class Verse extends AbstractEntity {
 	
 	private DynamicProperties meanings = new PrefixedDynamicProperties("meaning");
 	
+	@Fetch
 	@RelatedTo(type="COMMENTARY")
 	private Set<Commentary> commentaries = new HashSet<Commentary>();
 	
+	@Fetch
 	@RelatedTo(type="VIDEO")
 	private Set<Video> videos = new HashSet<Video>();
 	
+	@Fetch
 	@RelatedTo(type="AUDIO")
 	private Set<Audio> audios = new HashSet<Audio>();
 	

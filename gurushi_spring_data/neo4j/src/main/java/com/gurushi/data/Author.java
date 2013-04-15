@@ -9,9 +9,21 @@ public class Author extends AbstractEntity {
 	@Indexed(unique = true)
 	private String name;
 	private String wikipediaUrl;
+	private String sampradaya;
 	
 	public Author(String name) {
 		this.name = name;
+	}
+	
+	public Author(String name, String wikipediaUrl) {
+		this.name = name;
+		this.wikipediaUrl = wikipediaUrl;
+	}
+	
+	public Author(String name, String wikipediaUrl, String sampradaya) {
+		this.name = name;
+		this.wikipediaUrl = wikipediaUrl;
+		this.sampradaya = sampradaya;
 	}
 	
 	public Author() {}
@@ -30,6 +42,14 @@ public class Author extends AbstractEntity {
 
 	public void setWikipediaUrl(String wikipediaUrl) {
 		this.wikipediaUrl = wikipediaUrl;
+	}
+	
+	public String getSampradaya() {
+		return sampradaya;
+	}
+
+	public void setSampradaya(String sampradaya) {
+		this.sampradaya = sampradaya;
 	}
 
 	@Override

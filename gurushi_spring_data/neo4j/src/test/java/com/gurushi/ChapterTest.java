@@ -33,40 +33,11 @@ import com.gurushi.service.ScriptureService;
 public class ChapterTest extends AbstractIntegrationTest {
 
 	@Autowired
-	ChapterService service;
-	
-	@Autowired
 	ScriptureService scService;
 	
-	private Scripture gita;
-	
-	private Chapter chPreface, chIntro;
-
 	@Test
 	public void createChapters() {
-
-		gita = new Scripture("Bhagavad Gita");
-		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
-		
-		chPreface = new Chapter(null, "Preface", gita);
-		gita.setFirstChapter(chPreface);
-		
-		chPreface.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
-		
-		chPreface = service.save(chPreface);
-		
-		chIntro = new Chapter(null, "Introduction", gita);
-		chIntro.setDescription("Bhagavad-gītā is also known as Gītopaniṣad. It is the essence of Vedic knowledge and one of the most important Upaniṣads in Vedic literature.");
-		chIntro = service.save(chIntro);
-		
-		chPreface.setNextChapter(chIntro);
-		chPreface = service.save(chPreface);
-		
-		Chapter c1 = new Chapter("1", "Observing the Armies on the Battlefield of Kurukṣetra", gita);
-		c1 = service.save(c1);
-		
-		chIntro.setNextChapter(c1);
-		chIntro = service.save(chIntro);
+		super.createChapters();
 	}
 	
 	@Test
@@ -74,7 +45,7 @@ public class ChapterTest extends AbstractIntegrationTest {
 		createChapters();
 		
 		Scripture s = scService.findByName(gita.getName());
-		List<Chapter> chapters = service.getAllChaptersForAScripture(s);
+		List<Chapter> chapters = chService.getAllChaptersForAScripture(s);
 		
 		Assert.assertEquals(3, chapters.size());
 		
@@ -88,15 +59,15 @@ public class ChapterTest extends AbstractIntegrationTest {
 		
 		createChapters();
 		
-		Chapter current = service.findByTitleAndScripture(chIntro.getTitle(), chIntro.getScripture());
+		Chapter current = chService.findByTitleAndScripture(chIntro.getTitle(), chIntro.getScripture());
 		
-		Chapter previous = service.previousChapter(current);
+		Chapter previous = chService.previousChapter(current);
 		
 		Assert.assertEquals(chPreface, previous);
 		
 		current = previous;
 		
-		previous = service.previousChapter(current);
+		previous = chService.previousChapter(current);
 		
 		Assert.assertNull(previous);
 	}
