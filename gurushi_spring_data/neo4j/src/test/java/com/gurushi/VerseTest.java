@@ -27,7 +27,6 @@ import com.gurushi.data.Chapter;
 import com.gurushi.data.Commentary;
 import com.gurushi.data.Translation;
 import com.gurushi.data.Verse;
-import com.gurushi.data.Video;
 import com.gurushi.service.ChapterService;
 import com.gurushi.service.VerseService;
 
@@ -85,6 +84,49 @@ public class VerseTest extends AbstractIntegrationTest {
 		
 		//could not find a good video
 		
+		//Adding another verse
+		
+		v2 = new Verse("2", c1);
+		v1.setNextVerse(v2);
+		
+		//saving verse
+		service.save(v1);
+		
+		v2.setText("sañjaya uvāca"
+				+ LS + "dṛṣṭvā tu pāṇḍavānīkam"
+				+ LS + "vyūḍhaḿ duryodhanas tadā"
+				+ LS + "ācāryam upasańgamya"
+				+ LS + "rājā vacanam abravīt");
+	
+		Translation t2 = new Translation(a);
+		v2.setTranslation(t2);
+		t2.setText("Sañjaya said: O King, after looking over the army arranged in military formation by the sons of Pāṇḍu, King Duryodhana went to his teacher and spoke the following words.");
+		t2.setSourceUrl("http://vedabase.net/bg/1/2/en");
+		
+		//Srila Prabhupada
+		v2.addCommentary(new Commentary("Dhṛtarāṣṭra was blind from birth. Unfortunately, he was also bereft of spiritual vision. He knew very well that his sons were equally blind in the matter of religion, and he was sure that they could never reach an understanding with the Pāṇḍavas, who were all pious since birth." 
+						, "http://vedabase.net/bg/1/2/en"
+						, a));
+		
+		//Sri Vishwanath Chakravarti Thakur
+		v2.addCommentary(new Commentary("“O teacher, see this great army of the sons of Pandu, arranged for battle by your intelligent disciple, the son of Drupada.”"
+						, "http://www.bhagavad-gita.us/category/bhagavad-gita-chapter-1/"
+						, a2));
+		
+		//Sridhara Swami
+		v2.addCommentary(new Commentary("Having seen the armies of the Pandavas arrayed in military formation ready for battle, King Duryodhana approaches his preceptor Drona and spoke the following words."
+				, "http://www.bhagavad-gita.org/Gita/verse-01-02.html"
+				, a3));
+		
+		v2.addMeaning("sañjayaḥ uvāca", "Sañjaya said");
+		v2.addMeaning("dṛṣṭvā", "after seeing");
+		
+		v2.addAudio(new Audio("SP BG 01-02 London 1973-07-09 Death Is God", 
+				"http://audio.iskcondesiretree.info/01_-_His_Divine_Grace_A_C_Bhaktivedanta_Swami_Srila_Prabhupada/Lectures/English/Bhagavad_Gita/Chapter-01/SP_BG_01-02_London_1973-07-09_Death_Is_God.mp3"));
+		
+		//could not find a good video
+		
+		service.save(v2);
 		
 	}
 	
