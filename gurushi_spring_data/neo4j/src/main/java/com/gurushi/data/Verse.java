@@ -1,15 +1,16 @@
 package com.gurushi.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
-import org.springframework.data.neo4j.fieldaccess.DynamicProperties;
-import org.springframework.data.neo4j.fieldaccess.PrefixedDynamicProperties;
 import org.springframework.data.neo4j.support.index.IndexType;
 
 @NodeEntity
@@ -33,18 +34,20 @@ public class Verse extends AbstractEntity {
 	@RelatedTo
 	private Translation translation;
 	
-	private DynamicProperties meanings = new PrefixedDynamicProperties("meaning");
+	@Fetch
+	@RelatedTo(type="meanings")
+	private Set<Meaning> meanings = new HashSet<Meaning>();
 	
 	@Fetch
-	@RelatedTo(type="COMMENTARY")
+	@RelatedTo(type="commentary")
 	private Set<Commentary> commentaries = new HashSet<Commentary>();
 	
 	@Fetch
-	@RelatedTo(type="VIDEO")
+	@RelatedTo(type="video")
 	private Set<Video> videos = new HashSet<Video>();
 	
 	@Fetch
-	@RelatedTo(type="AUDIO")
+	@RelatedTo(type="audio")
 	private Set<Audio> audios = new HashSet<Audio>();
 	
 	public Verse(String number, Chapter chapter) {
@@ -82,12 +85,34 @@ public class Verse extends AbstractEntity {
 		this.translation = translation;
 	}
 
-	public DynamicProperties getMeanings() {
-		return meanings;
+	public List<Meaning> getMeanings() {
+		
+		if (meanings == null) {
+			return null;
+		}
+		
+		List<Meaning> listMeanings = new ArrayList<Meaning>(meanings); 
+		Collections.sort(
+			listMeanings, 
+			new Comparator<Meaning>() {
+				public int compare(Meaning o1, Meaning o2) {
+					if (o1.getId() == null) {
+						if (o2.getId() == null) {
+							return 0;
+						} else {
+							return 1;
+						}
+					}
+					return o1.getId().compareTo(o2.getId());
+				}
+			}
+		);
+		
+		return Collections.unmodifiableList(listMeanings);
 	}
 
 	public void addMeaning(String word, String meaning) {
-		this.meanings.setProperty(word, meaning);
+		this.meanings.add(new Meaning(word, meaning));
 	}
 	
 	public Set<Commentary> getCommentaries() {
