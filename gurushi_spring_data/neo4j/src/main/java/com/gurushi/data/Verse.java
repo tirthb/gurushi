@@ -35,7 +35,7 @@ public class Verse extends AbstractEntity {
 	private Translation translation;
 	
 	@Fetch
-	@RelatedTo(type="meanings")
+	@RelatedTo(type="meaning")
 	private Set<Meaning> meanings = new HashSet<Meaning>();
 	
 	@Fetch
