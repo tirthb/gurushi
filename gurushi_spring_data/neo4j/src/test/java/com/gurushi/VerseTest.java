@@ -47,6 +47,9 @@ public class VerseTest extends AbstractIntegrationTest {
 		super.createChapters();
 		
 		v1 = new Verse("1", c1);
+		c1.setFirstVerse(v1);
+		
+		c1 = chService.save(c1);
 		
 		v1.setText("dhṛtarāṣṭra uvāca"
 				+ LS + "dharma-kṣetre kuru-kṣetre"
@@ -90,7 +93,7 @@ public class VerseTest extends AbstractIntegrationTest {
 		v1.setNextVerse(v2);
 		
 		//saving verse
-		service.save(v1);
+		v1 = service.save(v1);
 		
 		v2.setText("sañjaya uvāca"
 				+ LS + "dṛṣṭvā tu pāṇḍavānīkam"
@@ -126,7 +129,7 @@ public class VerseTest extends AbstractIntegrationTest {
 		
 		//could not find a good video
 		
-		service.save(v2);
+		v2 = service.save(v2);
 		
 	}
 	
@@ -147,7 +150,7 @@ public class VerseTest extends AbstractIntegrationTest {
 	@Test
 	public void getPreviousVerse() {
 		
-		createChapters();
+		createVerses();
 		
 		Verse current = service.findByNumberAndChapter("2", c1);
 		
@@ -160,5 +163,16 @@ public class VerseTest extends AbstractIntegrationTest {
 		previous = service.previousVerse(current);
 		
 		Assert.assertNull(previous);
+	}
+	
+	@Test
+	public void getCommentaryOfAuthor() {
+		
+		createVerses();
+		
+		Author a = new Author("Sridhara Swami", null, "Rudra Vaisnava");
+		
+		Assert.assertEquals("How did Arjuna become bewildered and fall into ignorance? The speaker of the Mahabharata, Vaisampayana, started explaining the topic to Janmejaya in the Bhisma Parva, with the following words.", 
+				v1.getCommentaryOfAuthor(a).getText());
 	}
 }

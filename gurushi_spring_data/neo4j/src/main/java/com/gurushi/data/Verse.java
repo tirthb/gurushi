@@ -126,7 +126,7 @@ public class Verse extends AbstractEntity {
 		}
 		
 		for (Commentary commentary : commentaries) {
-			if (commentary.getAuthor().equals(a)) {
+			if (a.equals(commentary.getAuthor())) {
 				return commentary;
 			}
 		}

@@ -1,5 +1,6 @@
 package com.gurushi.data;
 
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -10,6 +11,7 @@ public class Commentary extends AbstractEntity {
 	private String sourceUrl;
 	
 	@RelatedTo
+	@Fetch
 	private Author author;
 	
 	public Commentary(String text, String sourceUrl, Author author) {
