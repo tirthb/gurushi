@@ -1,42 +1,39 @@
 package com.gurushi.loader;
 
 import java.io.File;
-
-
-//import com.gurushi.bo.*
-
-import java.util.List;
-import java.util.ArrayList;
 import java.io.IOException;
-import java.text.NumberFormat;
-
-import org.apache.commons.io.FilenameUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
-import java.lang.String;
-import java.util.Iterator;
+import com.gurushi.data.Author;
+import com.gurushi.data.Chapter;
+import com.gurushi.data.Commentary;
+import com.gurushi.data.Scripture;
+import com.gurushi.data.Translation;
+import com.gurushi.data.Verse;
 
-import com.gurushi.data.*;
-
-public class VedaBaseDotNet {
-	File rootDir;
+@Component
+public class VedaBaseDotNet extends ScriptureSource {
 	
-	Scripture sc;
 	Author author;
 	
-	List<Chapter> chapter_list;
-
-	public VedaBaseDotNet(File dir) {
-		rootDir = dir;
-		sc = new Scripture("Bhagavad Gita As It Is");
+	List<Chapter> chapters;
+	
+	//TODO:remove blank constructor
+	public VedaBaseDotNet() {}
+	
+	public VedaBaseDotNet(String rootDirectory, Scripture sc) {
+		super(rootDirectory, sc);
+		
 		author = new Author();
 		author.setName("His Grace Bhakti Vedanta Swami Srila Prabhupada");
-		chapter_list = new ArrayList<Chapter>();
+		chapters = new ArrayList<Chapter>();
 		createChapterLinks();
 	}
 
@@ -220,7 +217,7 @@ public class VedaBaseDotNet {
 			e.printStackTrace();
 		}
 		
-		sc.setFirstChapter(chapter_list.get(0));
+		sc.setFirstChapter(chapters.get(0));
 	}
 
 	private static void print(String msg, Object... args) {
@@ -248,7 +245,7 @@ public class VedaBaseDotNet {
 				String title = getChapterTitle(doc);
 				
 				ch = new Chapter(Integer.toString(chapter), title, sc);
-				chapter_list.add(ch);
+				chapters.add(ch);
 				
 				if (previous_chapter != null) {
 				  previous_chapter.setNextChapter(ch);
@@ -271,7 +268,7 @@ public class VedaBaseDotNet {
 			Verse previous_verse_obj = null;
 			for (chapter = 1; chapter <= 18; chapter++) {
 	
-				Chapter ch = chapter_list.get(chapter - 1);
+				Chapter ch = chapters.get(chapter - 1);
 				
 				for (int verse_num = 1;; verse_num++) {
 					String verse_file = rootDir + "/" + chapter + "/" + verse_num + "/en";

@@ -17,5 +17,10 @@ public class ScriptureServiceImpl implements ScriptureService {
 		
 		return rep.findByName(name);
 	}
+	
+	@Override
+	public Scripture save(Scripture s) {
+		return rep.save(s);
+	}
 
 }
