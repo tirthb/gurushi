@@ -293,13 +293,11 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			
 			createChapters();
 			
-			int chapter;
+			int chapter = 1;
 			Verse currentVerse = null;
 			Verse previousVerse = null;
-			for (chapter = 1; chapter <= 18; chapter++) {
+			for (Chapter ch : chapters) {
 	
-				Chapter ch = chapters.get(chapter - 1);
-				
 				for (int verseNum = 1;; verseNum++) {
 					String verseFile = rootDir + "/" + chapter + "/" + verseNum + "/en";
 					File file = new File(verseFile);
