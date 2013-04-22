@@ -9,6 +9,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.gurushi.data.Author;
@@ -17,27 +20,39 @@ import com.gurushi.data.Commentary;
 import com.gurushi.data.Scripture;
 import com.gurushi.data.Translation;
 import com.gurushi.data.Verse;
+import com.gurushi.service.ChapterService;
+import com.gurushi.service.ScriptureService;
+import com.gurushi.service.VerseService;
 
 @Component
-public class VedaBaseDotNet extends ScriptureSource {
+public class VedaBaseDotNetGita extends ScriptureSource {
+	
+	public static final String SOURCE_URL_PREFIX = "http://vedabase.net/bg/"; 
+	final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	Author author;
+	List<Chapter> chapters = new ArrayList<Chapter>();
 	
-	List<Chapter> chapters;
+	@Autowired
+	VerseService vs;
+	
+	@Autowired
+	ChapterService cs;
+	
+	@Autowired
+	ScriptureService ss;
 	
 	//TODO:remove blank constructor
-	public VedaBaseDotNet() {}
+	public VedaBaseDotNetGita() {}
 	
-	public VedaBaseDotNet(String rootDirectory, Scripture sc) {
-		super(rootDirectory, sc);
+	public VedaBaseDotNetGita(String rootDirectory, Scripture sc) {
 		
-		author = new Author();
-		author.setName("His Grace Bhakti Vedanta Swami Srila Prabhupada");
-		chapters = new ArrayList<Chapter>();
-		createChapterLinks();
+		super(rootDirectory, sc);
+		author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
+				"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
 	}
 
-	private List<Element> GetMatchingChilds(Element parent, String tag) {
+	private List<Element> getMatchingChilds(Element parent, String tag) {
 		List<Element> found = new ArrayList<Element>();;
 		Elements children = parent.children();
 		
@@ -62,7 +77,7 @@ public class VedaBaseDotNet extends ScriptureSource {
 		
 	}
 	
-	private List<Element> GetMatchingChildsRange(Element parent, String tag, int start, int end) {
+	private List<Element> getMatchingChildsRange(Element parent, String tag, int start, int end) {
 		List<Element> found = new ArrayList<Element>();;
 		Elements children = parent.children();
 		int flag = 0;
@@ -84,7 +99,7 @@ public class VedaBaseDotNet extends ScriptureSource {
 		return found;
 		
 	}
-	private Element FindNthChild(Element parent, String tag, int num) {
+	private Element findNthChild(Element parent, String tag, int num) {
 		
 		Elements children = parent.children();
 		int flag = 0;
@@ -187,13 +202,15 @@ public class VedaBaseDotNet extends ScriptureSource {
 			verse.setText(getVerse(doc.select("body").get(0)));
 			System.out.println("Verse: \n" + verse.getText());
 			
+			String sourceUrl = SOURCE_URL_PREFIX + ch.getNumber() + "/" + verse.getNumber() + "/en";
 			
 			Translation trans = new Translation(author);
 			trans.setText(getTranslation(doc.select("body").get(0)));
+			trans.setSourceUrl(sourceUrl);
 			
 			verse.setTranslation(trans);
 			
-			System.out.println("Translation: \n" + trans.getText());
+			logger.debug("Translation: \n" + trans.getText());
 
 			String synonyms = getSynonyms(doc.select("body").get(0));
 			String[] words = synonyms.split(";");
@@ -202,16 +219,14 @@ public class VedaBaseDotNet extends ScriptureSource {
 			for (int i = 0; i < words.length; i++) {
 				//System.out.println("Word = " + words[i]);
 				String word[] = words[i].split(" — ");
-				System.out.println(word[0] + " - " + word[1]);
+				logger.debug(word[0] + " - " + word[1]);
 				verse.addMeaning(word[0], word[1]);
 			}
 			
-			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), "http://vedabase.net/bg/" + ch.getNumber() + "/" + verse.getNumber() + "en", author);
+			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, author);
 			verse.addCommentary(purport);	
 					
-			System.out.println("Purport: \n" + purport.getText());
-			
-			
+			logger.debug("Purport:\n" + purport.getText());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -220,84 +235,108 @@ public class VedaBaseDotNet extends ScriptureSource {
 		sc.setFirstChapter(chapters.get(0));
 	}
 
-	private static void print(String msg, Object... args) {
-		System.out.println(String.format(msg, args));
+	private void print(String msg, Object... args) {
+		logger.info(String.format(msg, args));
 	}
 
-	private static String trim(String s, int width) {
+	private String trim(String s, int width) {
 		if (s.length() > width)
 			return s.substring(0, width - 1) + ".";
 		else
 			return s;
 	}
 
-	private void createChapterLinks() {
+	private void createChapters() {
 		int chapter;
 		Chapter ch;
-		Chapter previous_chapter = null;
+		Chapter previousChapter = null;
 		Document doc;
+		
 		for (chapter = 1; chapter <= 18; chapter++) {
+			
 			String first_verse = rootDir + "/" + 1 + "/" + 1 + "/en";
 			File input = new File(first_verse);
+			
 			try {
 				doc = Jsoup.parse(input, "UTF-8", "");
 				
 				String title = getChapterTitle(doc);
 				
 				ch = new Chapter(Integer.toString(chapter), title, sc);
+				
+				ch = cs.save(ch);
+				
 				chapters.add(ch);
 				
-				if (previous_chapter != null) {
-				  previous_chapter.setNextChapter(ch);
+				if (chapter == 1) {
+					sc.setFirstChapter(ch);
+					sc = ss.save(sc);
 				}
-				previous_chapter = ch;
+				
+				if (previousChapter != null) {
+				  previousChapter.setNextChapter(ch);
+				}
+				previousChapter = ch;
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 		}		
 		
-		
 	}
 	
 	
 	public void loadData() {
+		
 		try {
+			
+			createChapters();
+			
 			int chapter;
-			Verse current_verse_obj = null;
-			Verse previous_verse_obj = null;
+			Verse currentVerse = null;
+			Verse previousVerse = null;
 			for (chapter = 1; chapter <= 18; chapter++) {
 	
 				Chapter ch = chapters.get(chapter - 1);
 				
-				for (int verse_num = 1;; verse_num++) {
-					String verse_file = rootDir + "/" + chapter + "/" + verse_num + "/en";
-					File file = new File(verse_file);
-					if (!file.exists())
+				for (int verseNum = 1;; verseNum++) {
+					String verseFile = rootDir + "/" + chapter + "/" + verseNum + "/en";
+					File file = new File(verseFile);
+					
+					if (!file.exists()) {
 						break;
+					}
 					
-					System.out.println("File Being Processed: " + file.getCanonicalPath());
-					System.out.println("Chapter = " + chapter + " Verse = " + verse_num);
+					logger.info("File Being Processed: " + file.getCanonicalPath());
+					logger.info("Chapter = " + chapter + " Verse = " + verseNum);
 					
-					current_verse_obj = new Verse(Integer.toString(verse_num), ch);
+					currentVerse = new Verse(Integer.toString(verseNum), ch);
 					
-					if (verse_num == 1) {
-						ch.setFirstVerse(current_verse_obj);
+					if (verseNum == 1) {
+						ch.setFirstVerse(currentVerse);
 					}
 
-					processVerse(ch, current_verse_obj, verse_file);
+					processVerse(ch, currentVerse, verseFile);
 					
-					if (previous_verse_obj != null) {
-						previous_verse_obj.setNextVerse(current_verse_obj);
-						previous_verse_obj = current_verse_obj;
+					currentVerse = vs.save(currentVerse);
+					
+					if (previousVerse != null) {
+						
+						previousVerse.setNextVerse(currentVerse);
+						previousVerse = vs.save(previousVerse);
+						
+						previousVerse = currentVerse;
 					}
+					
 					System.out.println();
-					if (verse_num == 3) return;
+					
+					if (verseNum == 3) return;
 					
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 
 	}

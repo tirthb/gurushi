@@ -14,7 +14,7 @@ public class MainContentLoading {
 		Scripture gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
 		
-		VedaBaseDotNet vbdn = new VedaBaseDotNet(currentDir, gita);
+		VedaBaseDotNetGita vbdn = new VedaBaseDotNetGita(currentDir, gita);
 		vbdn.loadData();
 	}
 }

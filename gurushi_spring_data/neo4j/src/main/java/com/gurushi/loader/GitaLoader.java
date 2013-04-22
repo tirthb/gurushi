@@ -14,7 +14,7 @@ public class GitaLoader {
 	
 	//TODO:pass constructor arg
 	@Autowired
-	VedaBaseDotNet vbSource;
+	VedaBaseDotNetGita vbSource;
 	
 	private Scripture gita;
 

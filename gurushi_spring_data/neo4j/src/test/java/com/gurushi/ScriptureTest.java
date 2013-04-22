@@ -17,6 +17,8 @@ package com.gurushi;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gurushi.data.Chapter;
@@ -29,6 +31,8 @@ import com.gurushi.service.ScriptureService;
  * 
  */
 public class ScriptureTest extends AbstractIntegrationTest {
+	
+	final Logger logger = LoggerFactory.getLogger(ScriptureTest.class);
 
 	@Autowired
 	ScriptureService service;
@@ -56,7 +60,13 @@ public class ScriptureTest extends AbstractIntegrationTest {
 		
 		Scripture s = service.findByName(gita.getName());
 		
+		logger.info("Scripture id: " + gita.getId());
 		Assert.assertEquals(gita.getId(), s.getId());
 		Assert.assertEquals(gita.getFirstChapter(), s.getFirstChapter());
+	}
+	
+	@Test
+	public void cleanUpDB() {
+		//do nothing
 	}
 }
