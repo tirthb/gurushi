@@ -256,6 +256,8 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			String firstVerse = rootDir + "/" + chapter + "/" + 1 + "/en";
 			File input = new File(firstVerse);
 			
+			//TODO: if first verse does not exist, try second verse and so on
+			
 			try {
 				doc = Jsoup.parse(input, "UTF-8", "");
 				
@@ -278,7 +280,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 				previousChapter = ch;
 				
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}
@@ -294,7 +296,12 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			
 			for (Chapter ch : chapters) {
 	
+				//TODO: Need to determine all the verses looking at the folders
 				for (int verseNum = 1;; verseNum++) {
+					
+					//TODO:remove early break
+					if (verseNum == 4) break;
+					
 					String verseFile = rootDir + "/" + chapterIndex + "/" + verseNum + "/en";
 					
 					logger.info("File Being Processed: " + verseFile);
@@ -328,8 +335,6 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					
 					System.out.println();
 					
-					//TODO:remove early break
-					if (verseNum == 3) break;
 				}
 				
 				chapterIndex++;

@@ -2,7 +2,9 @@ package com.gurushi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TemplateServiceImpl implements TemplateService {
 
 	@Autowired

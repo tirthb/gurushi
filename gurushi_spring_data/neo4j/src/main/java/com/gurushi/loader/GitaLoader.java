@@ -5,9 +5,13 @@ import org.springframework.stereotype.Component;
 
 import com.gurushi.data.Scripture;
 import com.gurushi.service.ScriptureService;
+import com.gurushi.service.TemplateService;
 
 @Component
 public class GitaLoader {
+	
+	@Autowired
+	TemplateService ts;
 	
 	@Autowired
 	ScriptureService service;
@@ -19,6 +23,8 @@ public class GitaLoader {
 	private Scripture gita;
 
 	public void createAndLoadScripture() {
+		
+		ts.cleanUpDb();
 
 		gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
