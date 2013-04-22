@@ -232,7 +232,6 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			e.printStackTrace();
 		}
 		
-		sc.setFirstChapter(chapters.get(0));
 	}
 
 	private void print(String msg, Object... args) {
@@ -254,8 +253,8 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		
 		for (chapter = 1; chapter <= 18; chapter++) {
 			
-			String first_verse = rootDir + "/" + 1 + "/" + 1 + "/en";
-			File input = new File(first_verse);
+			String firstVerse = rootDir + "/" + chapter + "/" + 1 + "/en";
+			File input = new File(firstVerse);
 			
 			try {
 				doc = Jsoup.parse(input, "UTF-8", "");
@@ -281,11 +280,8 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-		}		
-		
+		}
 	}
-	
 	
 	public void loadData() {
 		
@@ -293,21 +289,23 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			
 			createChapters();
 			
-			int chapter = 1;
-			Verse currentVerse = null;
-			Verse previousVerse = null;
+			int chapterIndex = 1;
+			Verse currentVerse = null, previousVerse = null;
+			
 			for (Chapter ch : chapters) {
 	
 				for (int verseNum = 1;; verseNum++) {
-					String verseFile = rootDir + "/" + chapter + "/" + verseNum + "/en";
+					String verseFile = rootDir + "/" + chapterIndex + "/" + verseNum + "/en";
+					
+					logger.info("File Being Processed: " + verseFile);
+					logger.info("Chapter = " + chapterIndex + " Verse = " + verseNum);
+					
 					File file = new File(verseFile);
 					
 					if (!file.exists()) {
-						break;
+						logger.info("File not found: " + file.getCanonicalPath());
+						continue;
 					}
-					
-					logger.info("File Being Processed: " + file.getCanonicalPath());
-					logger.info("Chapter = " + chapter + " Verse = " + verseNum);
 					
 					currentVerse = new Verse(Integer.toString(verseNum), ch);
 					
@@ -318,20 +316,23 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					processVerse(ch, currentVerse, verseFile);
 					
 					currentVerse = vs.save(currentVerse);
+					ch = cs.save(ch);
 					
 					if (previousVerse != null) {
 						
 						previousVerse.setNextVerse(currentVerse);
 						previousVerse = vs.save(previousVerse);
-						
-						previousVerse = currentVerse;
 					}
+					
+					previousVerse = currentVerse;
 					
 					System.out.println();
 					
-					if (verseNum == 3) return;
-					
+					//TODO:remove early break
+					if (verseNum == 3) break;
 				}
+				
+				chapterIndex++;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
