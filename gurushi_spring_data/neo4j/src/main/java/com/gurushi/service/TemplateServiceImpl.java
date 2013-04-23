@@ -3,6 +3,7 @@ package com.gurushi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TemplateServiceImpl implements TemplateService {
@@ -11,6 +12,7 @@ public class TemplateServiceImpl implements TemplateService {
 	Neo4jTemplate template;
 	
 	@Override
+	@Transactional
 	public void cleanUpDb() {
     	
     	String cypherForClearingGraph = 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Verse;
@@ -17,6 +18,7 @@ public class VerseServiceImpl implements VerseService {
 	private VerseRepository rep;
 
 	@Override
+	@Transactional
 	public Verse save(Verse v) {
 		return rep.save(v);
 	}

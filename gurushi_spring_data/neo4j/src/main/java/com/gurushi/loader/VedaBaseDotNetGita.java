@@ -3,6 +3,9 @@ package com.gurushi.loader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -28,7 +31,7 @@ import com.gurushi.service.VerseService;
 public class VedaBaseDotNetGita extends ScriptureSource {
 	
 	public static final String SOURCE_URL_PREFIX = "http://vedabase.net/bg/"; 
-	final Logger logger = LoggerFactory.getLogger(getClass());
+	final Logger logger = LoggerFactory.getLogger(VedaBaseDotNetGita.class);
 	
 	Author author;
 	List<Chapter> chapters = new ArrayList<Chapter>();
@@ -49,7 +52,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		
 		super(rootDirectory, sc);
 		author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
-				"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
+						"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
 	}
 
 	private List<Element> getMatchingChilds(Element parent, String tag) {
@@ -200,7 +203,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			doc = Jsoup.parse(input, "UTF-8", "");
 			
 			verse.setText(getVerse(doc.select("body").get(0)));
-			System.out.println("Verse: \n" + verse.getText());
+			logger.debug("Verse: \n" + verse.getText());
 			
 			String sourceUrl = SOURCE_URL_PREFIX + ch.getNumber() + "/" + verse.getNumber() + "/en";
 			
@@ -215,9 +218,8 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			String synonyms = getSynonyms(doc.select("body").get(0));
 			String[] words = synonyms.split(";");
 			
-			System.out.println("Synonyms:");
+			logger.debug("Meanings:");
 			for (int i = 0; i < words.length; i++) {
-				//System.out.println("Word = " + words[i]);
 				String word[] = words[i].split(" — ");
 				logger.debug(word[0] + " - " + word[1]);
 				verse.addMeaning(word[0], word[1]);
@@ -295,12 +297,15 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			Verse currentVerse = null, previousVerse = null;
 			
 			for (Chapter ch : chapters) {
+				
+				String chapterDirPath = rootDir + "/" + chapterIndex + "/";
+				
+				File chapterDir = new File(chapterDirPath);
+				
+				List<String> verseNumbers = getVerseNumbers(chapterDirPath);
 	
 				//TODO: Need to determine all the verses looking at the folders
-				for (int verseNum = 1;; verseNum++) {
-					
-					//TODO:remove early break
-					if (verseNum == 4) break;
+				for (String verseNum : verseNumbers) {
 					
 					String verseFile = rootDir + "/" + chapterIndex + "/" + verseNum + "/en";
 					
@@ -314,9 +319,10 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 						continue;
 					}
 					
-					currentVerse = new Verse(Integer.toString(verseNum), ch);
+					currentVerse = new Verse(verseNum, ch);
 					
-					if (verseNum == 1) {
+					//if first verse
+					if (verseNum.equals(verseNumbers.get(0))) {
 						ch.setFirstVerse(currentVerse);
 					}
 
@@ -332,9 +338,6 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					}
 					
 					previousVerse = currentVerse;
-					
-					System.out.println();
-					
 				}
 				
 				chapterIndex++;
@@ -343,5 +346,75 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			throw new RuntimeException(e);
 		}
 
+	}
+	
+	public List<String> getVerseNumbers(String chapterDirPath) {
+		
+		List<String> verseNumbers = new ArrayList<String>();
+		
+		File chapterDir = new File(chapterDirPath);
+		
+		List<File> verseDirList = Arrays.asList(chapterDir.listFiles());
+		
+		for (File verseDir : verseDirList) {
+			if(verseDir.isDirectory()) {
+				verseNumbers.add(verseDir.getName());
+			}
+		}
+		
+		//sorting the verse numbers, please note some have dashes
+		Collections.sort(
+				verseNumbers, 
+				new Comparator<String>() {
+					@Override
+					public int compare(String o1, String o2) {
+						String[] o1Arr = o1.split("-");
+						o1 = o1Arr[0];
+						
+						String[] o2Arr = o2.split("-");
+						o2 = o2Arr[0];
+						
+						return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
+					}
+				}
+			);
+		
+		//we would like to remove "21" if it is followed by "21,21-22". Also "2" if preceded by "1-2"
+		
+		String [] verseNumbersCopy = verseNumbers.toArray(new String[verseNumbers.size()]);
+		
+		for (int i = 0; i < verseNumbersCopy.length; i++) {
+			String verseNumber = verseNumbersCopy[i];
+			
+			if (verseNumber.contains("-")) {
+				String[] verseNumArr = verseNumber.split("-");
+				
+				//remove "21" if it is followed by "21,21-22" or remove 25 and 26 if followed by "25,26,25-28"
+				if (i > 0) {
+					int j = i - 1;
+					while( !verseNumbersCopy[j].contains("-") 
+							&& Integer.valueOf(verseNumArr[0]) - 1 == Integer.valueOf(verseNumbersCopy[j]) - 1) {
+						
+						verseNumbers.remove(verseNumbersCopy[j]);
+						if (j == 0) break;
+						j--;
+					}
+				}
+				
+				//remove "2" if preceded by "1-2" or remove 21 and 23 when "20-23, 21, 22"
+				if (i < verseNumbersCopy.length - 1) {
+					int j = i + 1;
+					while( !verseNumbersCopy[j].contains("-") 
+							&& Integer.valueOf(verseNumArr[1]) + 1 == Integer.valueOf(verseNumbersCopy[j]) + 1) {
+						
+						verseNumbers.remove(verseNumbersCopy[j]);
+						if (j == verseNumbersCopy.length) break;
+						j++;
+					}
+				}
+			}
+		}
+		
+		return verseNumbers;
 	}
 }

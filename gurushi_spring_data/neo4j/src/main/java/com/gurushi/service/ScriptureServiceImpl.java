@@ -2,6 +2,7 @@ package com.gurushi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gurushi.data.Scripture;
 import com.gurushi.data.repository.ScriptureRepository;
@@ -19,6 +20,7 @@ public class ScriptureServiceImpl implements ScriptureService {
 	}
 	
 	@Override
+	@Transactional
 	public Scripture save(Scripture s) {
 		return rep.save(s);
 	}

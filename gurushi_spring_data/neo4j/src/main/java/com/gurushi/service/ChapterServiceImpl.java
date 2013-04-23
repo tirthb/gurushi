@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Scripture;
@@ -17,6 +18,7 @@ public class ChapterServiceImpl implements ChapterService {
 	private ChapterRepository rep;
 
 	@Override
+	@Transactional
 	public Chapter save(Chapter c) {
 		return rep.save(c);
 	}
