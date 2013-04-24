@@ -348,7 +348,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 
 	}
 	
-	public List<String> getVerseNumbers(String chapterDirPath) {
+	private List<String> getVerseNumbers(String chapterDirPath) {
 		
 		List<String> verseNumbers = new ArrayList<String>();
 		
@@ -362,6 +362,13 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			}
 		}
 		
+		orderVerseNumbers(verseNumbers);
+		
+		return verseNumbers;
+	}
+	
+	private void orderVerseNumbers(List<String> verseNumbers) {
+
 		//sorting the verse numbers, please note some have dashes
 		Collections.sort(
 				verseNumbers, 
@@ -370,51 +377,50 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					public int compare(String o1, String o2) {
 						String[] o1Arr = o1.split("-");
 						o1 = o1Arr[0];
-						
+
 						String[] o2Arr = o2.split("-");
 						o2 = o2Arr[0];
-						
+
 						return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
 					}
 				}
 			);
-		
+
 		//we would like to remove "21" if it is followed by "21,21-22". Also "2" if preceded by "1-2"
-		
+
 		String [] verseNumbersCopy = verseNumbers.toArray(new String[verseNumbers.size()]);
-		
+
 		for (int i = 0; i < verseNumbersCopy.length; i++) {
 			String verseNumber = verseNumbersCopy[i];
-			
+
 			if (verseNumber.contains("-")) {
 				String[] verseNumArr = verseNumber.split("-");
-				
+
 				//remove "21" if it is followed by "21,21-22" or remove 25 and 26 if followed by "25,26,25-28"
 				if (i > 0) {
 					int j = i - 1;
 					while( !verseNumbersCopy[j].contains("-") 
-							&& Integer.valueOf(verseNumArr[0]) - 1 == Integer.valueOf(verseNumbersCopy[j]) - 1) {
-						
+							&& Integer.valueOf(verseNumArr[0]) - 1 != Integer.valueOf(verseNumbersCopy[j])) {
+
 						verseNumbers.remove(verseNumbersCopy[j]);
-						if (j == 0) break;
 						j--;
+						if (j == 0) break;
 					}
 				}
-				
+
 				//remove "2" if preceded by "1-2" or remove 21 and 23 when "20-23, 21, 22"
 				if (i < verseNumbersCopy.length - 1) {
 					int j = i + 1;
 					while( !verseNumbersCopy[j].contains("-") 
-							&& Integer.valueOf(verseNumArr[1]) + 1 == Integer.valueOf(verseNumbersCopy[j]) + 1) {
-						
+							&& Integer.valueOf(verseNumArr[1]) + 1 != Integer.valueOf(verseNumbersCopy[j])) {
+
 						verseNumbers.remove(verseNumbersCopy[j]);
-						if (j == verseNumbersCopy.length) break;
 						j++;
+						if (j == verseNumbersCopy.length) break;
 					}
 				}
 			}
 		}
-		
-		return verseNumbers;
+
 	}
 }
