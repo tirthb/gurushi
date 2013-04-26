@@ -51,8 +51,6 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 	public VedaBaseDotNetGita(String rootDirectory, Scripture sc) {
 		
 		super(rootDirectory, sc);
-		author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
-						"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
 	}
 
 	private List<Element> getMatchingChilds(Element parent, String tag) {
@@ -251,45 +249,33 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		int chapter;
 		Chapter ch;
 		Chapter previousChapter = null;
-		Document doc;
 		
 		for (chapter = 1; chapter <= 18; chapter++) {
-			
-			String firstVerse = rootDir + "/" + chapter + "/" + 1 + "/en";
-			File input = new File(firstVerse);
-			
-			//TODO: if first verse does not exist, try second verse and so on
-			
-			try {
-				doc = Jsoup.parse(input, "UTF-8", "");
-				
-				String title = getChapterTitle(doc);
-				
-				ch = new Chapter(Integer.toString(chapter), title, sc);
-				
-				ch = cs.save(ch);
-				
-				chapters.add(ch);
-				
-				if (chapter == 1) {
-					sc.setFirstChapter(ch);
-					sc = ss.save(sc);
-				}
-				
-				if (previousChapter != null) {
-				  previousChapter.setNextChapter(ch);
-				}
-				previousChapter = ch;
-				
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
+
+			ch = new Chapter(Integer.toString(chapter), sc);
+
+			ch = cs.save(ch);
+
+			chapters.add(ch);
+
+			if (chapter == 1) {
+				sc.setFirstChapter(ch);
+				sc = ss.save(sc);
 			}
+
+			if (previousChapter != null) {
+				previousChapter.setNextChapter(ch);
+			}
+			previousChapter = ch;
 		}
 	}
 	
 	public void loadData() {
 		
 		try {
+			
+			author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
+					"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
 			
 			createChapters();
 			
@@ -300,11 +286,8 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 				
 				String chapterDirPath = rootDir + "/" + chapterIndex + "/";
 				
-				File chapterDir = new File(chapterDirPath);
-				
 				List<String> verseNumbers = getVerseNumbers(chapterDirPath);
-	
-				//TODO: Need to determine all the verses looking at the folders
+				
 				for (String verseNum : verseNumbers) {
 					
 					String verseFile = rootDir + "/" + chapterIndex + "/" + verseNum + "/en";
@@ -315,7 +298,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					File file = new File(verseFile);
 					
 					if (!file.exists()) {
-						logger.info("File not found: " + file.getCanonicalPath());
+						logger.warn("File not found: " + file.getCanonicalPath());
 						continue;
 					}
 					
@@ -323,6 +306,10 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					
 					//if first verse
 					if (verseNum.equals(verseNumbers.get(0))) {
+						
+						Document doc = Jsoup.parse(file, "UTF-8", "");
+						ch.setTitle(getChapterTitle(doc));
+						
 						ch.setFirstVerse(currentVerse);
 					}
 
@@ -338,9 +325,13 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					}
 					
 					previousVerse = currentVerse;
+					
+					//if (verseNum.equals(verseNumbers.get(2))) break;
 				}
 				
 				chapterIndex++;
+				
+				//if (chapterIndex == 3) return;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -397,7 +388,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 				String[] verseNumArr = verseNumber.split("-");
 
 				//remove "21" if it is followed by "21,21-22" or remove 25 and 26 if followed by "25,26,25-28"
-				if (i > 0) {
+				if (i > 1) {
 					int j = i - 1;
 					while( !verseNumbersCopy[j].contains("-") 
 							&& Integer.valueOf(verseNumArr[0]) - 1 != Integer.valueOf(verseNumbersCopy[j])) {

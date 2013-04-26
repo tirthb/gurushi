@@ -38,6 +38,11 @@ public class Chapter extends AbstractEntity {
 		this.scripture = scripture;
 	}
 	
+	public Chapter(String number, Scripture scripture) {
+		this.number = number;
+		this.scripture = scripture;
+	}
+	
 	public Chapter() {}
 	
 	public String getTitle() {
