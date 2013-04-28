@@ -37,6 +37,9 @@ public class ScriptureTest extends AbstractIntegrationTest {
 	@Autowired
 	ScriptureService service;
 	
+	@Autowired
+	ChapterService chService;
+	
 	private Scripture gita;
 
 	@Test
@@ -56,13 +59,14 @@ public class ScriptureTest extends AbstractIntegrationTest {
 	@Test
 	public void getScriptureByName() {
 		
-		createScripture();
+		//createScripture();
 		
-		Scripture s = service.findByName(gita.getName());
+		Scripture s = service.findByName("Bhagavad Gita");
 		
-		logger.info("Scripture id: " + gita.getId());
-		Assert.assertEquals(gita.getId(), s.getId());
-		Assert.assertEquals(gita.getFirstChapter(), s.getFirstChapter());
+		Assert.assertNotNull(s.getId());
+		
+		Chapter c = chService.findByNumberAndScripture("1", s);
+		Assert.assertEquals(c, s.getFirstChapter());
 	}
 	
 	@Test

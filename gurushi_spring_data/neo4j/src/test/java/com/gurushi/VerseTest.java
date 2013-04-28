@@ -19,15 +19,16 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gurushi.data.Audio;
 import com.gurushi.data.Author;
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Commentary;
-import com.gurushi.data.Translation;
 import com.gurushi.data.Verse;
 import com.gurushi.service.ChapterService;
+import com.gurushi.service.ScriptureService;
 import com.gurushi.service.VerseService;
 
 /**
@@ -35,15 +36,20 @@ import com.gurushi.service.VerseService;
  * 
  */
 public class VerseTest extends AbstractIntegrationTest {
+	
+	private final Logger logger = LoggerFactory.getLogger(getClass()); 
 
 	@Autowired
 	VerseService service;
 	
+	@Autowired
+	ScriptureService scService;
+	
 	Verse v1, v2;
 	
-	@Test
+	//@Test
 	public void createVerses() {
-		
+		/*
 		super.createChapters();
 		
 		v1 = new Verse("1", c1);
@@ -130,7 +136,7 @@ public class VerseTest extends AbstractIntegrationTest {
 		//could not find a good video
 		
 		v2 = service.save(v2);
-		
+		*/
 	}
 	
 	@Test
@@ -174,5 +180,34 @@ public class VerseTest extends AbstractIntegrationTest {
 		
 		Assert.assertEquals("How did Arjuna become bewildered and fall into ignorance? The speaker of the Mahabharata, Vaisampayana, started explaining the topic to Janmejaya in the Bhisma Parva, with the following words.", 
 				v1.getCommentaryOfAuthor(a).getText());
+	}
+	
+	@Test
+	public void getVerseByNumberAndScripture() {
+		
+		gita = scService.findByName("Bhagavad Gita");
+		
+		Author author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
+				"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
+		
+		Chapter c = chService.findByNumberAndScripture("2", gita);
+		
+		Verse v = service.findByNumberAndChapter("2", c);
+		v.setChapter(c);
+		
+		v.getNextVerse().setChapter(c);
+		
+		logger.info(v.toString());
+		logger.info("Next verse:" + v.getNextVerse());
+		logger.info(v.getText());
+		logger.info(v.getMeanings().toString());
+		logger.info("Translation:" + v.getTranslation().getText());
+		logger.info("Translation source:" + v.getTranslation().getSourceUrl());
+		
+		Commentary com = v.getCommentaryOfAuthor(author);
+		
+		logger.info("Commentary: " + com.getText());
+		logger.info("Commentary source: " + com.getSourceUrl());
+		
 	}
 }

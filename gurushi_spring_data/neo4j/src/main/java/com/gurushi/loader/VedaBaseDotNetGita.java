@@ -220,7 +220,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			for (int i = 0; i < words.length; i++) {
 				String word[] = words[i].split(" — ");
 				logger.debug(word[0] + " - " + word[1]);
-				verse.addMeaning(word[0], word[1]);
+				verse.addMeaning(word[0], word[1], i);
 			}
 			
 			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, author);
@@ -326,12 +326,12 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					
 					previousVerse = currentVerse;
 					
-					//if (verseNum.equals(verseNumbers.get(2))) break;
+					if (verseNum.equals(verseNumbers.get(2))) break;
 				}
 				
 				chapterIndex++;
 				
-				//if (chapterIndex == 3) return;
+				if (chapterIndex == 3) return;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

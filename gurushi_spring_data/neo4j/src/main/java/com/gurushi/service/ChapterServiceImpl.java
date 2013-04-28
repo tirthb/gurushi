@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Scripture;
+import com.gurushi.data.Verse;
 import com.gurushi.data.repository.ChapterRepository;
 
 @Service
@@ -16,6 +17,9 @@ public class ChapterServiceImpl implements ChapterService {
 	
 	@Autowired
 	private ChapterRepository rep;
+	
+	@Autowired
+	private ScriptureService scService;
 
 	@Override
 	@Transactional
@@ -27,11 +31,12 @@ public class ChapterServiceImpl implements ChapterService {
 	public List<Chapter> getAllChaptersForAScripture(Scripture s) {
 		
 		List<Chapter> chapters = new ArrayList<Chapter>();
+		Chapter firstChapter = lazyLoad(scService.firstChapter(s));
 		
-		Chapter nextChapter = rep.findOne(s.getFirstChapter().getId());
+		Chapter nextChapter = firstChapter;
 		while (nextChapter != null) {
 			chapters.add(nextChapter);
-			nextChapter = nextChapter.getNextChapter();
+			nextChapter = lazyLoad(nextChapter).getNextChapter();
 		}
 		
 		return chapters;
@@ -41,10 +46,33 @@ public class ChapterServiceImpl implements ChapterService {
 	public Chapter previousChapter(Chapter c) {
 		return rep.previousChapter(c);
 	}
+	
+	@Override
+	public Chapter nextChapter(Chapter c) {
+		return rep.nextChapter(c);
+	}
 
 	@Override
 	public Chapter findByTitleAndScripture(String title, Scripture s) {
-		return rep.findByTitleAndScripture(title, s);
+		return lazyLoad(rep.findByTitleAndScripture(title, s));
 	}
 
+	@Override
+	public Chapter findByNumberAndScripture(String number, Scripture s) {
+		return lazyLoad(rep.findByNumberAndScripture(number, s));
+	}
+	
+	private Chapter lazyLoad(Chapter c) {
+		
+		if (c != null && c.getId() != null) {
+			c.setNextChapter(nextChapter(c));
+		}
+		return c;
+	}
+
+	@Override
+	public Verse firstVerse(Chapter c) {
+		return rep.firstVerse(c);
+	}
+	
 }

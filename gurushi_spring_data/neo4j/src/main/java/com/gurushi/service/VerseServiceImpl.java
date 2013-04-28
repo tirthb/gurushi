@@ -16,6 +16,9 @@ public class VerseServiceImpl implements VerseService {
 	
 	@Autowired
 	private VerseRepository rep;
+	
+	@Autowired
+	private ChapterService chService;
 
 	@Override
 	@Transactional
@@ -28,10 +31,10 @@ public class VerseServiceImpl implements VerseService {
 		
 		List<Verse> verses = new ArrayList<Verse>();
 		
-		Verse nextVerse = rep.findOne(c.getFirstVerse().getId());
+		Verse nextVerse = lazyLoad(chService.firstVerse(c));
 		while (nextVerse != null) {
 			verses.add(nextVerse);
-			nextVerse = nextVerse.getNextVerse();
+			nextVerse = lazyLoad(nextVerse).getNextVerse();
 		}
 		
 		return verses;
@@ -41,10 +44,23 @@ public class VerseServiceImpl implements VerseService {
 	public Verse previousVerse(Verse v) {
 		return rep.previousVerse(v);
 	}
+	
+	@Override
+	public Verse nextVerse(Verse v) {
+		return rep.nextVerse(v);
+	}
 
 	@Override
 	public Verse findByNumberAndChapter(String number, Chapter ch) {
-		return rep.findByNumberAndChapter(number, ch);
+		return lazyLoad(rep.findByNumberAndChapter(number, ch));
+	}
+	
+	private Verse lazyLoad(Verse v) {
+		
+		if (v != null && v.getId() != null) {
+			v.setNextVerse(nextVerse(v));
+		}
+		return v;
 	}
 
 }

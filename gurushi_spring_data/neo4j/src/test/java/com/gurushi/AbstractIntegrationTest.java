@@ -15,7 +15,6 @@
  */
 package com.gurushi;
 
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
@@ -45,9 +44,9 @@ public abstract class AbstractIntegrationTest {
 	
 	Chapter chPreface, chIntro, c1;
 
-    @Before
+    //@Before
     public void cleanUp() {
-    	
+    	/*
     	String cypherForClearingGraph = 
     			"START n=node(*)"
     			+ " MATCH n-[r?]-()"
@@ -55,10 +54,11 @@ public abstract class AbstractIntegrationTest {
     			+ " DELETE n,r";
     	
     	template.query(cypherForClearingGraph, null);
+    	*/
     }
     
     public void createChapters() {
-    	
+    	/*
     	gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
 		
@@ -81,6 +81,6 @@ public abstract class AbstractIntegrationTest {
 		
 		chIntro.setNextChapter(c1);
 		chIntro = chService.save(chIntro);
-    	
+    	*/
     }
 }

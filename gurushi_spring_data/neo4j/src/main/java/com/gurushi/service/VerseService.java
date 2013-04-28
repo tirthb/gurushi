@@ -11,7 +11,9 @@ public interface VerseService {
 	
 	public List<Verse> getAllVersesForAChapter(Chapter c);
 	
-	public Verse previousVerse(Verse c);
+	public Verse previousVerse(Verse v);
+	
+	public Verse nextVerse(Verse v);
 	
 	public Verse findByNumberAndChapter(String number, Chapter c); 
 }

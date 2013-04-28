@@ -21,6 +21,7 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Scripture;
+import com.gurushi.data.Verse;
 
 public interface ChapterRepository extends GraphRepository<Chapter>, CypherDslRepository<Chapter> {
 	
@@ -29,5 +30,17 @@ public interface ChapterRepository extends GraphRepository<Chapter>, CypherDslRe
 	           " RETURN previousChapter")
 	Chapter previousChapter(Chapter c);
 	
+	@Query("START chapter=node({0}) " +
+	           " MATCH chapter-[:nextChapter]->nextChapter" +
+	           " RETURN nextChapter")
+	Chapter nextChapter(Chapter c);
+	
+	@Query("START chapter=node({0}) " +
+	           " MATCH chapter-[:firstVerse]->firstVerse" +
+	           " RETURN firstVerse")
+	Verse firstVerse(Chapter c);
+	
 	Chapter findByTitleAndScripture(String title, Scripture s);
+	
+	Chapter findByNumberAndScripture(String number, Scripture s);
 }

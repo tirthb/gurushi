@@ -15,12 +15,19 @@
  */
 package com.gurushi.data.repository;
 
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.CypherDslRepository;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
+import com.gurushi.data.Chapter;
 import com.gurushi.data.Scripture;
 
 public interface ScriptureRepository extends GraphRepository<Scripture>, CypherDslRepository<Scripture> {
 	
 	Scripture findByName(String name);
+	
+	@Query("START scripture=node({0}) " +
+	           " MATCH scripture-[:firstChapter]->firstChapter" +
+	           " RETURN firstChapter")
+	Chapter firstChapter(Scripture s);
 }

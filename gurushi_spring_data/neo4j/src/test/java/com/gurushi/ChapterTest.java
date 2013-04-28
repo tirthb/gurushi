@@ -42,9 +42,9 @@ public class ChapterTest extends AbstractIntegrationTest {
 	
 	@Test
 	public void getAllChaptersForScripture() {
-		createChapters();
+		//createChapters();
 		
-		Scripture s = scService.findByName(gita.getName());
+		Scripture s = scService.findByName("Bhagavad Gita");
 		List<Chapter> chapters = chService.getAllChaptersForAScripture(s);
 		
 		Assert.assertEquals(3, chapters.size());
@@ -57,9 +57,9 @@ public class ChapterTest extends AbstractIntegrationTest {
 	@Test
 	public void getPreviousChapter() {
 		
-		createChapters();
+		//createChapters();
 		
-		Chapter current = chService.findByTitleAndScripture(chIntro.getTitle(), chIntro.getScripture());
+		Chapter current = chService.findByNumberAndScripture(chIntro.getTitle(), chIntro.getScripture());
 		
 		Chapter previous = chService.previousChapter(current);
 		

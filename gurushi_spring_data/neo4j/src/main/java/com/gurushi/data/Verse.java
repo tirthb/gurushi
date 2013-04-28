@@ -25,7 +25,7 @@ public class Verse extends AbstractEntity {
 	@Indexed(indexType = IndexType.FULLTEXT,indexName = "verse_search")
 	private String text;
 	
-	@Fetch
+	//@Fetch
 	@RelatedTo
 	private Verse nextVerse;
 	
@@ -59,6 +59,10 @@ public class Verse extends AbstractEntity {
 
 	public Chapter getChapter() {
 		return chapter;
+	}
+	
+	public void setChapter(Chapter chapter) {
+		this.chapter = chapter;
 	}
 	
 	public String getText() {
@@ -96,14 +100,14 @@ public class Verse extends AbstractEntity {
 			listMeanings, 
 			new Comparator<Meaning>() {
 				public int compare(Meaning o1, Meaning o2) {
-					if (o1.getId() == null) {
-						if (o2.getId() == null) {
+					if (o1.getSortOrder() == null) {
+						if (o2.getSortOrder() == null) {
 							return 0;
 						} else {
 							return 1;
 						}
 					}
-					return o1.getId().compareTo(o2.getId());
+					return o1.getSortOrder().compareTo(o2.getSortOrder());
 				}
 			}
 		);
@@ -111,8 +115,8 @@ public class Verse extends AbstractEntity {
 		return Collections.unmodifiableList(listMeanings);
 	}
 
-	public void addMeaning(String word, String meaning) {
-		this.meanings.add(new Meaning(word, meaning));
+	public void addMeaning(String word, String meaning, int sortOrder) {
+		this.meanings.add(new Meaning(word, meaning, sortOrder));
 	}
 	
 	public Set<Commentary> getCommentaries() {

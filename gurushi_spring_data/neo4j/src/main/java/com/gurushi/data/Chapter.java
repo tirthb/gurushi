@@ -1,6 +1,5 @@
 package com.gurushi.data;
 
-import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -24,12 +23,12 @@ public class Chapter extends AbstractEntity {
 	private String description;
 	
 	@RelatedTo
-	@Fetch
+	//@Fetch
 	private Chapter nextChapter;
 	
 	//all chapters need not have verses, for example introduction
 	@RelatedTo
-	@Fetch
+	//@Fetch
 	private Verse firstVerse;
 	
 	public Chapter(String number, String title, Scripture scripture) {

@@ -29,5 +29,10 @@ public interface VerseRepository extends GraphRepository<Verse>, CypherDslReposi
 	           " RETURN previousVerse")
 	Verse previousVerse(Verse v);
 	
+	@Query("START verse=node({0}) " +
+	           " MATCH verse-[:nextVerse]->nextVerse" +
+	           " RETURN nextVerse")
+	Verse nextVerse(Verse v);
+	
 	Verse findByNumberAndChapter(String number, Chapter c);
 }
