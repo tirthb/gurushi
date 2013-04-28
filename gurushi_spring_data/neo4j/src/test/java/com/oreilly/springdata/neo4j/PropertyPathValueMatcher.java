@@ -36,7 +36,6 @@ public class PropertyPathValueMatcher extends TypeSafeMatcher<Object> {
 	 */
 	@Override
 	public void describeTo(Description description) {
-		// TODO Auto-generated method stub
 
 	}
 

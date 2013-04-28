@@ -326,7 +326,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					
 					previousVerse = currentVerse;
 					
-					if (verseNum.equals(verseNumbers.get(2))) break;
+					//if (verseNum.equals(verseNumbers.get(2))) break;
 				}
 				
 				//new chapter
@@ -334,7 +334,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 				
 				chapterIndex++;
 				
-				if (chapterIndex == 3) return;
+				//if (chapterIndex == 3) return;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

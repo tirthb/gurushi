@@ -34,7 +34,6 @@ public class LineItemMatcher extends TypeSafeMatcher<LineItem> {
 	 */
 	@Override
 	public void describeTo(Description description) {
-		// TODO Auto-generated method stub
 
 	}
 

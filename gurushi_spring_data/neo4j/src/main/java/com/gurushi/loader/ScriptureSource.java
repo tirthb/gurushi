@@ -1,16 +1,14 @@
 package com.gurushi.loader;
 
-import java.io.File;
-
 import com.gurushi.data.Scripture;
 
 public abstract class ScriptureSource {
 	
-	protected File rootDir;
+	protected String rootDir;
 	protected Scripture sc;
 	
 	public ScriptureSource(String rootDirectory, Scripture sc) {
-		this.rootDir = new File(rootDirectory);
+		this.rootDir = rootDirectory;
 		this.sc = sc;
 	}
 	
@@ -20,7 +18,7 @@ public abstract class ScriptureSource {
 	public abstract void loadData() ;
 	
 	public void setRootDir(String rootDir) {
-		this.rootDir = new File(rootDir);
+		this.rootDir = rootDir;
 	}
 	
 	public void setScripture(Scripture s) {

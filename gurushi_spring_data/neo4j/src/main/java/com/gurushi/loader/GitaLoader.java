@@ -36,8 +36,7 @@ public class GitaLoader {
 		//BhagavadGitaDotOrg bgo = new BhagavadGitaDotOrg(currentDir);
 		//File currentDir = new File("F:/Dropbox/vedabase.net/bg"); // current directory
 		
-		//TODO: make rootDir as property
-		vbSource.setRootDir("/Users/tirthomishtu/gurushi/vedabase.net-bg");
+		//rootDir defined in application-context.xml
 		vbSource.setScripture(gita);
 		
 		vbSource.loadData();

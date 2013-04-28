@@ -38,7 +38,6 @@ public class CollectionPathMatcher extends TypeSafeMatcher<Collection<Object>> {
 	 */
 	@Override
 	public void describeTo(Description description) {
-		// TODO Auto-generated method stub
 
 	}
 

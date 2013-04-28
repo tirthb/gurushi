@@ -19,4 +19,9 @@
 	<bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase" scope="singleton">
          <constructor-arg index="0" value="http://localhost:7474/db/data" />
     </bean>
+    
+    <bean id="vedaBaseDotNetGita" class="com.gurushi.loader.VedaBaseDotNetGita" scope="singleton">
+         <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" />
+    </bean>
+    
 </beans>
