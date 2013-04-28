@@ -5,12 +5,14 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 @NodeEntity
 public class Audio extends AbstractEntity {
 	
+	private Integer sortOrder;
 	private String title;
 	private String url;
 	
-	public Audio(String title, String url) {
+	public Audio(String title, String url, int sortOrder) {
 		this.title = title;
 		this.url = url;
+		this.sortOrder = sortOrder;
 	}
 	
 	public Audio() {}
@@ -26,6 +28,9 @@ public class Audio extends AbstractEntity {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public Integer getSortOrder() {
+		return sortOrder;
 	}
 	
 	@Override

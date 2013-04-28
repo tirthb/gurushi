@@ -142,16 +142,58 @@ public class Verse extends AbstractEntity {
 		commentaries.add(commentary);
 	}
 	
-	public Set<Video> getVideos() {
-		return Collections.unmodifiableSet(videos);
+	public List<Video> getVideos() {
+		if (videos == null) {
+			return null;
+		}
+		
+		List<Video> listVideo = new ArrayList<Video>(videos); 
+		Collections.sort(
+				listVideo, 
+			new Comparator<Video>() {
+				public int compare(Video o1, Video o2) {
+					if (o1.getSortOrder() == null) {
+						if (o2.getSortOrder() == null) {
+							return 0;
+						} else {
+							return 1;
+						}
+					}
+					return o1.getSortOrder().compareTo(o2.getSortOrder());
+				}
+			}
+		);
+		
+		return Collections.unmodifiableList(listVideo);
 	}
 	
 	public void addVideo(Video video) {
 		videos.add(video);
 	}
 	
-	public Set<Audio> getAudios() {
-		return Collections.unmodifiableSet(audios);
+	public List<Audio> getAudios() {
+		if (audios == null) {
+			return null;
+		}
+		
+		List<Audio> listAudio = new ArrayList<Audio>(audios); 
+		Collections.sort(
+			listAudio, 
+			new Comparator<Audio>() {
+				public int compare(Audio o1, Audio o2) {
+					if (o1.getSortOrder() == null) {
+						if (o2.getSortOrder() == null) {
+							return 0;
+						} else {
+							return 1;
+						}
+					}
+					return o1.getSortOrder().compareTo(o2.getSortOrder());
+				}
+			}
+		);
+		
+		return Collections.unmodifiableList(listAudio);
 	}
 	
 	public void addAudio(Audio audio) {
