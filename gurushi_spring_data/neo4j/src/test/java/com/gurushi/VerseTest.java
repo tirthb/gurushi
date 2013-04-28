@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gurushi.data.Author;
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Commentary;
+import com.gurushi.data.Scripture;
 import com.gurushi.data.Verse;
 import com.gurushi.service.ChapterService;
 import com.gurushi.service.ScriptureService;
@@ -141,12 +142,14 @@ public class VerseTest extends AbstractIntegrationTest {
 	
 	@Test
 	public void getAllVersesForAChapter() {
-		createVerses();
+	
+		Scripture s = scService.findByName("Bhagavad Gita");
 		
-		Chapter c = chService.findByTitleAndScripture(c1.getTitle(), gita);
+		Chapter c = chService.findByNumberAndScripture("2", s);
+		
 		List<Verse> verses = service.getAllVersesForAChapter(c);
 		
-		Assert.assertEquals(2, verses.size());
+		Assert.assertEquals(3, verses.size());
 		
 		for (Verse verse : verses) {
 			Assert.assertNotNull(verse.getId());
@@ -156,12 +159,13 @@ public class VerseTest extends AbstractIntegrationTest {
 	@Test
 	public void getPreviousVerse() {
 		
-		createVerses();
+		Scripture s = scService.findByName("Bhagavad Gita");
 		
-		Verse current = service.findByNumberAndChapter("2", c1);
-		
+		Chapter c = chService.findByNumberAndScripture("2", s);
+		Verse current = service.findByNumberAndChapter("2", c);
 		Verse previous = service.previousVerse(current);
 		
+		Verse v1 = service.findByNumberAndChapter("1", c);
 		Assert.assertEquals(v1, previous);
 		
 		current = previous;

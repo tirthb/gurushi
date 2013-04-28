@@ -304,6 +304,10 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					
 					currentVerse = new Verse(verseNum, ch);
 					
+					processVerse(ch, currentVerse, verseFile);
+					
+					currentVerse = vs.save(currentVerse);
+					
 					//if first verse
 					if (verseNum.equals(verseNumbers.get(0))) {
 						
@@ -311,12 +315,8 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 						ch.setTitle(getChapterTitle(doc));
 						
 						ch.setFirstVerse(currentVerse);
+						ch = cs.save(ch);
 					}
-
-					processVerse(ch, currentVerse, verseFile);
-					
-					currentVerse = vs.save(currentVerse);
-					ch = cs.save(ch);
 					
 					if (previousVerse != null) {
 						
@@ -328,6 +328,9 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					
 					if (verseNum.equals(verseNumbers.get(2))) break;
 				}
+				
+				//new chapter
+				previousVerse = null;
 				
 				chapterIndex++;
 				
