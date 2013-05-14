@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>spring-data-book-mongodb</artifactId>
-	
-	<name>Spring Data Book - MongoDB</name>
+	<artifactId>gurushi-import-mongo</artifactId>
+
+	<name>Gurushi Import to Mongo</name>
 	
 	<parent>
 		<groupId>com.oreilly.springdata</groupId>
@@ -41,6 +41,19 @@
 			<groupId>com.mysema.querydsl</groupId>
 			<artifactId>querydsl-mongodb</artifactId>
 			<version>${querydsl.version}</version>
+		</dependency>
+		
+		<dependency>
+		  <!-- jsoup HTML parser library @ http://jsoup.org/ -->
+		  <groupId>org.jsoup</groupId>
+		  <artifactId>jsoup</artifactId>
+		  <version>1.7.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
 		</dependency>
 
 	</dependencies>
