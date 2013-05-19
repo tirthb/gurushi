@@ -3,9 +3,7 @@ package com.gurushi.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -30,14 +28,14 @@ public class Verse extends AbstractDocument {
 	
 	private Translation translation;
 	
-	private Set<Meaning> meanings = new HashSet<Meaning>();
+	private List<Meaning> meanings = new ArrayList<Meaning>();
 	
 	@DBRef
-	private Set<Commentary> commentaries = new HashSet<Commentary>();
+	private List<Commentary> commentaries = new ArrayList<Commentary>();
 	
-	private Set<Video> videos = new HashSet<Video>();
+	private List<Video> videos = new ArrayList<Video>();
 	
-	private Set<Audio> audios = new HashSet<Audio>();
+	private List<Audio> audios = new ArrayList<Audio>();
 	
 	public Verse(String number, Chapter chapter) {
 		this.number = number;
@@ -108,8 +106,8 @@ public class Verse extends AbstractDocument {
 		this.meanings.add(new Meaning(word, meaning, sortOrder));
 	}
 	
-	public Set<Commentary> getCommentaries() {
-		return Collections.unmodifiableSet(commentaries);
+	public List<Commentary> getCommentaries() {
+		return Collections.unmodifiableList(commentaries);
 	}
 	
 	public Commentary getCommentaryOfAuthor(Author a) {

@@ -19,6 +19,10 @@
 		<property name="writeConcern" value="SAFE" />
 	</bean>
 	
+	<bean id="vedaBaseDotNetGita" class="com.gurushi.loader.VedaBaseDotNetGita" scope="singleton">
+         <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" />
+    </bean>
+	
 	<mongo:repositories base-package="com.oreilly.springdata.mongodb" />
 	
 </beans>
