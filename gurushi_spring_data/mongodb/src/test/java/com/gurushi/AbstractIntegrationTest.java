@@ -61,6 +61,8 @@ public abstract class AbstractIntegrationTest {
     	gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
 		
+		gita = ss.save(gita);
+		
 		chPreface = new Chapter(null, "Preface", gita);
 		chPreface.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
 		
@@ -86,5 +88,6 @@ public abstract class AbstractIntegrationTest {
 		chIntro.setNextChapter(c1.getId());
 		chIntro = cs.save(chIntro);
 		
+		gita = ss.save(gita);
     }
 }
