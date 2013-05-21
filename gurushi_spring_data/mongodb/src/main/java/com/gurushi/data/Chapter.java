@@ -100,7 +100,7 @@ public class Chapter extends AbstractDocument {
 	}
 	
 	public String toString() {
-		return String.format("Chapter(%d) %s", getId(), title);
+		return String.format("Chapter(%s) %s", getId(), title);
 	}
 	
 }

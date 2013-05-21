@@ -37,7 +37,7 @@ public class Translation {
 
 	public String toString() {
 		return String.format("Translation %s", 
-								(text != null && text.length() > 10) ? text.substring(0,10) : text);
+								(text != null && text.length() > 10) ? text.substring(0,10) + "..." : text);
 	}
 	
 }

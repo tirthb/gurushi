@@ -138,7 +138,7 @@ public class VerseTest extends AbstractIntegrationTest {
 				, a);
 		ts.save(com);
 		
-		v1.addCommentary(com);
+		v2.addCommentary(com);
 		
 		//Sri Vishwanath Chakravarti Thakur
 		com = new Commentary("“O teacher, see this great army of the sons of Pandu, arranged for battle by your intelligent disciple, the son of Drupada.”"
@@ -204,9 +204,11 @@ public class VerseTest extends AbstractIntegrationTest {
 	@Test
 	public void getPreviousVerse() {
 		
+		createVerses();
+		
 		Scripture s = scService.findByName("Bhagavad Gita");
 		
-		Chapter c = cs.findByNumberAndScripture("2", s);
+		Chapter c = cs.findByNumberAndScripture("1", s);
 		Verse current = service.findByNumberAndChapter("2", c);
 		Verse previous = service.previousVerse(current);
 		
@@ -234,15 +236,16 @@ public class VerseTest extends AbstractIntegrationTest {
 	@Test
 	public void getVerseByNumberAndScripture() {
 		
+		createVerses();
+		
 		gita = scService.findByName("Bhagavad Gita");
 		
-		Author author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
+		Author author = new Author("Srila Prabhupada", 
 				"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
 		
-		Chapter c = cs.findByNumberAndScripture("2", gita);
+		Chapter c = cs.findByNumberAndScripture("1", gita);
 		
 		Verse v = service.findByNumberAndChapter("2", c);
-		v.setChapter(c);
 		
 		//v.getNextVerse().setChapter(c);
 		
@@ -250,7 +253,7 @@ public class VerseTest extends AbstractIntegrationTest {
 		logger.info("Next verse:" + v.getNextVerse());
 		logger.info(v.getText());
 		logger.info(v.getMeanings().toString());
-		logger.info("Translation:" + v.getTranslation().getText());
+		logger.info("Translation:" + v.getTranslation());
 		logger.info("Translation source:" + v.getTranslation().getSourceUrl());
 		
 		Commentary com = v.getCommentaryOfAuthor(author);
