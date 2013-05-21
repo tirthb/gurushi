@@ -26,4 +26,9 @@ public class TemplateServiceImpl implements TemplateService {
     	template.dropCollection(Scripture.class);
     }
 
+	@Override
+    public void save(Object o) {
+		template.save(o);
+    }
+
 }

@@ -220,7 +220,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			for (int i = 0; i < words.length; i++) {
 				String word[] = words[i].split(" — ");
 				logger.debug(word[0] + " - " + word[1]);
-				verse.addMeaning(word[0], word[1], i);
+				verse.addMeaning(word[0], word[1]);
 			}
 			
 			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, author);

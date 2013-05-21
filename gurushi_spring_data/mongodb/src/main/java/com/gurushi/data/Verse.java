@@ -82,28 +82,11 @@ public class Verse extends AbstractDocument {
 			return null;
 		}
 		
-		List<Meaning> listMeanings = new ArrayList<Meaning>(meanings); 
-		Collections.sort(
-			listMeanings, 
-			new Comparator<Meaning>() {
-				public int compare(Meaning o1, Meaning o2) {
-					if (o1.getSortOrder() == null) {
-						if (o2.getSortOrder() == null) {
-							return 0;
-						} else {
-							return 1;
-						}
-					}
-					return o1.getSortOrder().compareTo(o2.getSortOrder());
-				}
-			}
-		);
-		
-		return Collections.unmodifiableList(listMeanings);
+		return Collections.unmodifiableList(meanings);
 	}
 
-	public void addMeaning(String word, String meaning, int sortOrder) {
-		this.meanings.add(new Meaning(word, meaning, sortOrder));
+	public void addMeaning(String word, String meaning) {
+		this.meanings.add(new Meaning(word, meaning));
 	}
 	
 	public List<Commentary> getCommentaries() {
@@ -163,24 +146,7 @@ public class Verse extends AbstractDocument {
 			return null;
 		}
 		
-		List<Audio> listAudio = new ArrayList<Audio>(audios); 
-		Collections.sort(
-			listAudio, 
-			new Comparator<Audio>() {
-				public int compare(Audio o1, Audio o2) {
-					if (o1.getSortOrder() == null) {
-						if (o2.getSortOrder() == null) {
-							return 0;
-						} else {
-							return 1;
-						}
-					}
-					return o1.getSortOrder().compareTo(o2.getSortOrder());
-				}
-			}
-		);
-		
-		return Collections.unmodifiableList(listAudio);
+		return Collections.unmodifiableList(audios);
 	}
 	
 	public void addAudio(Audio audio) {
@@ -192,7 +158,7 @@ public class Verse extends AbstractDocument {
 	}
 
 	public void setPreviousVerse(ObjectId previousVerse) {
-		this.nextVerse = previousVerse;
+		this.previousVerse = previousVerse;
 	}
 	
 	public ObjectId getNextVerse() {

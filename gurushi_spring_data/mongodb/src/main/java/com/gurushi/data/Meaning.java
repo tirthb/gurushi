@@ -3,17 +3,15 @@ package com.gurushi.data;
 
 public class Meaning {
 	
-	private Integer sortOrder;
 	private String word;
 	private String meaning;
 	
 	public Meaning() {
 	}
 	
-	public Meaning(String word, String meaning, int sortOrder) {
+	public Meaning(String word, String meaning) {
 		this.word = word;
 		this.meaning = meaning;
-		this.sortOrder = sortOrder;
 	}
 	
 	public String getWord() {
@@ -24,10 +22,6 @@ public class Meaning {
 		return meaning;
 	}
 	
-	public Integer getSortOrder() {
-		return sortOrder;
-	}
-
 	@Override
 	public String toString() {
 		return String.format("%s:%s", word, meaning);

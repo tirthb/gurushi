@@ -40,37 +40,17 @@ public class ScriptureTest extends AbstractIntegrationTest {
 	@Autowired
 	ChapterService chService;
 	
-	private Scripture gita;
-
-	@Test
-	public void createScripture() {
-
-		gita = new Scripture("Bhagavad Gita");
-		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
-		
-		Chapter chPreface = new Chapter(null, "Preface", gita);
-		chPreface.setDescription("Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.");
-		
-		chPreface = chService.save(chPreface);
-		
-		gita.addChapter(chPreface.getId());
-	}
-	
 	@Test
 	public void getScriptureByName() {
 		
-		//createScripture();
+		createChapters();
 		
 		Scripture s = service.findByName("Bhagavad Gita");
 		
 		Assert.assertNotNull(s.getId());
 		
 		Chapter c = chService.findByNumberAndScripture("1", s);
-		Assert.assertEquals(c.getId(), s.getChapters().get(0));
+		Assert.assertEquals(c.getId(), s.getChapters().get(2));
 	}
 	
-	@Test
-	public void cleanUpDB() {
-		//do nothing
-	}
 }

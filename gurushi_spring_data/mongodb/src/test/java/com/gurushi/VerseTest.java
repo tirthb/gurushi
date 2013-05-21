@@ -23,13 +23,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.gurushi.data.Audio;
 import com.gurushi.data.Author;
 import com.gurushi.data.Chapter;
 import com.gurushi.data.Commentary;
 import com.gurushi.data.Scripture;
+import com.gurushi.data.Translation;
 import com.gurushi.data.Verse;
 import com.gurushi.service.ChapterService;
 import com.gurushi.service.ScriptureService;
+import com.gurushi.service.TemplateService;
 import com.gurushi.service.VerseService;
 
 /**
@@ -46,18 +49,17 @@ public class VerseTest extends AbstractIntegrationTest {
 	@Autowired
 	ScriptureService scService;
 	
+	@Autowired
+	TemplateService ts;
+	
 	Verse v1, v2;
 	
-	//@Test
+	@Test
 	public void createVerses() {
-		/*
+		
 		super.createChapters();
 		
 		v1 = new Verse("1", c1);
-		c1.setFirstVerse(v1);
-		
-		c1 = chService.save(c1);
-		
 		v1.setText("dhṛtarāṣṭra uvāca"
 				+ LS + "dharma-kṣetre kuru-kṣetre"
 				+ LS + "samavetā yuyutsavaḥ"
@@ -71,20 +73,31 @@ public class VerseTest extends AbstractIntegrationTest {
 		t.setText("Dhṛtarāṣṭra said: O Sañjaya, after my sons and the sons of Pāṇḍu assembled in the place of pilgrimage at Kurukṣetra, desiring to fight, what did they do?");
 		t.setSourceUrl("http://vedabase.net/bg/1/1/en");
 		
+		Commentary com = new Commentary("Bhagavad-gītā is the widely read theistic science summarized in the Gītā-māhātmya (Glorification of the Gītā). There it says that one should read Bhagavad-gītā very scrutinizingly with the help of a person who is a devotee of Śrī Kṛṣṇa and try to understand it without personally motivated interpretations. The example of clear understanding is there in the Bhagavad-gītā itself, in the way the teaching is understood by Arjuna, who heard the Gītā directly from the Lord. If someone is fortunate enough to understand Bhagavad-gītā in that line of disciplic succession, without motivated interpretation, then he surpasses all studies of Vedic wisdom, and all scriptures of the world. One will find in the Bhagavad-gītā all that is contained in other scriptures, but the reader will also find things which are not to be found elsewhere. That is the specific standard of the Gītā. It is the perfect theistic science because it is directly spoken by the Supreme Personality of Godhead, Lord Śrī Kṛṣṇa." 
+				, "http://vedabase.net/bg/1/1/en"
+				, a);
+		ts.save(com);
+		
 		//the commentary is being added to the verse through the constructor
-		v1.addCommentary(new Commentary("Bhagavad-gītā is the widely read theistic science summarized in the Gītā-māhātmya (Glorification of the Gītā). There it says that one should read Bhagavad-gītā very scrutinizingly with the help of a person who is a devotee of Śrī Kṛṣṇa and try to understand it without personally motivated interpretations. The example of clear understanding is there in the Bhagavad-gītā itself, in the way the teaching is understood by Arjuna, who heard the Gītā directly from the Lord. If someone is fortunate enough to understand Bhagavad-gītā in that line of disciplic succession, without motivated interpretation, then he surpasses all studies of Vedic wisdom, and all scriptures of the world. One will find in the Bhagavad-gītā all that is contained in other scriptures, but the reader will also find things which are not to be found elsewhere. That is the specific standard of the Gītā. It is the perfect theistic science because it is directly spoken by the Supreme Personality of Godhead, Lord Śrī Kṛṣṇa." 
-						, "http://vedabase.net/bg/1/1/en"
-						, a));
+		v1.addCommentary(com);
 		
 		Author a2 = new Author("Sri Vishwanath Chakravarti Thakur", "http://en.wikipedia.org/wiki/Visvanatha_Chakravarti");
-		v1.addCommentary(new Commentary("How did Arjuna become bewildered and fall into ignorance? The speaker of the Mahabharata, Vaisampayana, started explaining the topic to Janmejaya in the Bhisma Parva, with the following words."
-						, "http://www.bhagavad-gita.us/category/bhagavad-gita-chapter-1/"
-						, a2));
+		
+		com = new Commentary("How did Arjuna become bewildered and fall into ignorance? The speaker of the Mahabharata, Vaisampayana, started explaining the topic to Janmejaya in the Bhisma Parva, with the following words."
+				, "http://www.bhagavad-gita.us/category/bhagavad-gita-chapter-1/"
+				, a2);
+		ts.save(com);
+		
+		v1.addCommentary(com);
 		
 		Author a3 = new Author("Sridhara Swami", null, "Rudra Vaisnava");
-		v1.addCommentary(new Commentary("How did Arjuna become bewildered and fall into ignorance? The speaker of the Mahabharata, Vaisampayana, started explaining the topic to Janmejaya in the Bhisma Parva, with the following words."
+		
+		com = new Commentary("How did Arjuna become bewildered and fall into ignorance? The speaker of the Mahabharata, Vaisampayana, started explaining the topic to Janmejaya in the Bhisma Parva, with the following words."
 				, "http://www.bhagavad-gita.org/Gita/verse-01-01.html"
-				, a3));
+				, a3);
+		ts.save(com);
+		
+		v1.addCommentary(com);
 		
 		v1.addMeaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said");
 		v1.addMeaning("dharma-kṣetre", "in the place of pilgrimage");
@@ -94,13 +107,19 @@ public class VerseTest extends AbstractIntegrationTest {
 		
 		//could not find a good video
 		
+		//saving verse
+		v1 = service.save(v1);
+		
+		//saving versse ids in the commentary
+		for (Commentary comm : v1.getCommentaries()) {
+			comm.setVerse(v1.getId());
+			ts.save(comm);
+		}
+		
 		//Adding another verse
 		
 		v2 = new Verse("2", c1);
-		v1.setNextVerse(v2);
-		
-		//saving verse
-		v1 = service.save(v1);
+		v2.setPreviousVerse(v1.getId());
 		
 		v2.setText("sañjaya uvāca"
 				+ LS + "dṛṣṭvā tu pāṇḍavānīkam"
@@ -114,19 +133,29 @@ public class VerseTest extends AbstractIntegrationTest {
 		t2.setSourceUrl("http://vedabase.net/bg/1/2/en");
 		
 		//Srila Prabhupada
-		v2.addCommentary(new Commentary("Dhṛtarāṣṭra was blind from birth. Unfortunately, he was also bereft of spiritual vision. He knew very well that his sons were equally blind in the matter of religion, and he was sure that they could never reach an understanding with the Pāṇḍavas, who were all pious since birth." 
-						, "http://vedabase.net/bg/1/2/en"
-						, a));
+		com = new Commentary("Dhṛtarāṣṭra was blind from birth. Unfortunately, he was also bereft of spiritual vision. He knew very well that his sons were equally blind in the matter of religion, and he was sure that they could never reach an understanding with the Pāṇḍavas, who were all pious since birth." 
+				, "http://vedabase.net/bg/1/2/en"
+				, a);
+		ts.save(com);
+		
+		v1.addCommentary(com);
 		
 		//Sri Vishwanath Chakravarti Thakur
-		v2.addCommentary(new Commentary("“O teacher, see this great army of the sons of Pandu, arranged for battle by your intelligent disciple, the son of Drupada.”"
-						, "http://www.bhagavad-gita.us/category/bhagavad-gita-chapter-1/"
-						, a2));
+		com = new Commentary("“O teacher, see this great army of the sons of Pandu, arranged for battle by your intelligent disciple, the son of Drupada.”"
+				, "http://www.bhagavad-gita.us/category/bhagavad-gita-chapter-1/"
+				, a2);
+		ts.save(com);
+		
+		v2.addCommentary(com);
+		
+		com = new Commentary("Having seen the armies of the Pandavas arrayed in military formation ready for battle, King Duryodhana approaches his preceptor Drona and spoke the following words."
+				, "http://www.bhagavad-gita.org/Gita/verse-01-02.html"
+				, a3);
+		
+		ts.save(com);
 		
 		//Sridhara Swami
-		v2.addCommentary(new Commentary("Having seen the armies of the Pandavas arrayed in military formation ready for battle, King Duryodhana approaches his preceptor Drona and spoke the following words."
-				, "http://www.bhagavad-gita.org/Gita/verse-01-02.html"
-				, a3));
+		v2.addCommentary(com);
 		
 		v2.addMeaning("sañjayaḥ uvāca", "Sañjaya said");
 		v2.addMeaning("dṛṣṭvā", "after seeing");
@@ -137,19 +166,35 @@ public class VerseTest extends AbstractIntegrationTest {
 		//could not find a good video
 		
 		v2 = service.save(v2);
-		*/
+		
+		//Adding verses to chapter
+		c1.addVerse(v1.getId());
+		c1.addVerse(v2.getId());
+		c1 = cs.save(c1);
+		
+		//saving versse ids in the commentary
+		for (Commentary comm : v2.getCommentaries()) {
+			comm.setVerse(v2.getId());
+			ts.save(comm);
+		}
+		
+		v1.setNextVerse(v2.getId());
+		v1 = service.save(v1);
+		
 	}
 	
 	@Test
 	public void getAllVersesForAChapter() {
+		
+		createVerses();
 	
 		Scripture s = scService.findByName("Bhagavad Gita");
 		
-		Chapter c = cs.findByNumberAndScripture("2", s);
+		Chapter c = cs.findByNumberAndScripture("1", s);
 		
 		List<Verse> verses = service.getAllVersesForAChapter(c);
 		
-		Assert.assertEquals(3, verses.size());
+		Assert.assertEquals(2, verses.size());
 		
 		for (Verse verse : verses) {
 			Assert.assertNotNull(verse.getId());

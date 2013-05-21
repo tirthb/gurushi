@@ -56,12 +56,20 @@ public class ChapterTest extends AbstractIntegrationTest {
 		
 		Scripture s = ss.findByName("Bhagavad Gita");
 		
-		Chapter current = cs.findByNumberAndScripture("2", s);
+		Chapter current = cs.findByNumberAndScripture("1", s);
 		Chapter previous = cs.previousChapter(current);
 		
-		Chapter chOne = cs.findByNumberAndScripture("1", s);
+		Chapter chIntro = cs.findByTitleAndScripture("Introduction", s);
 		
-		Assert.assertEquals(chOne, previous);
+		Assert.assertEquals(chIntro, previous);
+		
+		current = previous;
+		
+		previous = cs.previousChapter(current);
+		
+		Chapter chPreface = cs.findByTitleAndScripture("Preface", s);
+		
+		Assert.assertEquals(chPreface, previous);
 		
 		current = previous;
 		
