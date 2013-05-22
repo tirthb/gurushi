@@ -25,6 +25,7 @@ import com.gurushi.data.Translation;
 import com.gurushi.data.Verse;
 import com.gurushi.service.ChapterService;
 import com.gurushi.service.ScriptureService;
+import com.gurushi.service.TemplateService;
 import com.gurushi.service.VerseService;
 
 @Component
@@ -44,6 +45,9 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 	
 	@Autowired
 	ScriptureService ss;
+	
+	@Autowired
+	TemplateService ts;
 	
 	//TODO:remove blank constructor
 	public VedaBaseDotNetGita() {}
@@ -224,7 +228,13 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			}
 			
 			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, author);
-			verse.addCommentary(purport);	
+			ts.save(purport);
+			
+			verse.addCommentary(purport);
+			vs.save(verse);
+			
+			purport.setVerse(verse.getId());
+			ts.save(purport);
 					
 			logger.debug("Purport:\n" + purport.getText());
 
@@ -316,8 +326,6 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 						
 						previousVerse.setNextVerse(currentVerse.getId());
 						vs.save(previousVerse);
-					} else {
-						currentVerse = vs.save(currentVerse);
 					}
 					
 					ch.addVerse(currentVerse.getId());
