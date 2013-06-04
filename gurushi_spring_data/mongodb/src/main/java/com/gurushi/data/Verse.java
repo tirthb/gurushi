@@ -37,6 +37,8 @@ public class Verse extends AbstractDocument {
 	
 	private List<Audio> audios = new ArrayList<Audio>();
 	
+	private Vocal vocal;
+	
 	public Verse(String number, Chapter chapter) {
 		this.number = number;
 		this.chapter = chapter;
@@ -167,6 +169,14 @@ public class Verse extends AbstractDocument {
 
 	public void setNextVerse(ObjectId nextVerse) {
 		this.nextVerse = nextVerse;
+	}
+	
+	public Vocal getVocal() {
+		return vocal;
+	}
+
+	public void setVocal(Vocal vocal) {
+		this.vocal = vocal;
 	}
 
 	@Override
