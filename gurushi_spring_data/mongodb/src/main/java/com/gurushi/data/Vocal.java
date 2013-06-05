@@ -1,17 +1,17 @@
 package com.gurushi.data;
 
 
-public class Audio {
+public class Vocal {
 	
 	private String title;
 	private String url;
 	
-	public Audio(String title, String url) {
+	public Vocal(String title, String url) {
 		this.title = title;
 		this.url = url;
 	}
 	
-	public Audio() {}
+	public Vocal() {}
 	
 	public String getTitle() {
 		return title;
@@ -47,7 +47,7 @@ public class Audio {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Audio other = (Audio) obj;
+		Vocal other = (Vocal) obj;
 		if (url == null) {
 				return false;
 		} else if (!url.equals(other.url))
