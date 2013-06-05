@@ -20,6 +20,9 @@ public class GitaLoader {
 	@Autowired
 	VedaBaseDotNetGita vbSource;
 	
+	@Autowired
+	BhagavadGitaDotOrg bgdo;
+	
 	private Scripture gita;
 
 	public void createAndLoadScripture() {
@@ -37,9 +40,15 @@ public class GitaLoader {
 		//File currentDir = new File("F:/Dropbox/vedabase.net/bg"); // current directory
 		
 		//rootDir defined in application-context.xml
-		vbSource.setScripture(gita);
-		
+		vbSource.setScripture(gita);		
 		vbSource.loadData();
+
+		bgdo.setScripture(gita);		
+		bgdo.loadData();
+		
+		
 	}
+	
+	
 
 }
