@@ -399,7 +399,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		//we would like to remove "21" if it is followed by "21,21-22". Also "2" if preceded by "1-2"
 
 		String [] verseNumbersCopy = verseNumbers.toArray(new String[verseNumbers.size()]);
-
+         /*
 		for (int i = 0; i < verseNumbersCopy.length; i++) {
 			String verseNumber = verseNumbersCopy[i];
 
@@ -430,7 +430,29 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					}
 				}
 			}
+			
+		
 		}
+        */
+		for (int i = 0; i < verseNumbersCopy.length; i++) {
+			String verseNumber = verseNumbersCopy[i];
 
+			if (verseNumber.contains("-")) {
+				for (int j = 0; j < verseNumbersCopy.length; j++) {
+ 
+					  if (i == j || verseNumbersCopy[j].contains("-")) {
+						  continue;
+					  }
+					   
+					  String[] verseNumArr = verseNumber.split("-");
+					  
+					  if ( Integer.valueOf(verseNumbersCopy[j]) >= Integer.valueOf(verseNumArr[0])  && Integer.valueOf(verseNumbersCopy[j]) <= Integer.valueOf(verseNumArr[1]) ) {
+						  verseNumbers.remove(verseNumbersCopy[j]);
+					  }
+			  }
+			
+		
+			}
+		}
 	}
 }
