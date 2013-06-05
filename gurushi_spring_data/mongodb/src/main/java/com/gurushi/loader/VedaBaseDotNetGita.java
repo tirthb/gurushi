@@ -434,6 +434,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		
 		}
         */
+		/*
 		for (int i = 0; i < verseNumbersCopy.length; i++) {
 			String verseNumber = verseNumbersCopy[i];
 
@@ -454,5 +455,50 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		
 			}
 		}
+		*/
+		for (int i = 0; i < verseNumbersCopy.length; i++) {
+			String verseNumber = verseNumbersCopy[i];
+
+			if (verseNumber.contains("-")) {
+				String[] verseNumArr = verseNumber.split("-");
+
+				//remove "21" if it is followed by "21,21-22" or remove 25 and 26 if followed by "25,26,25-28"
+				if (i > 0) {
+					for (int j = i - 1; j >= 0; j--)
+					{
+					  //int j = i - 1;
+					  if (verseNumbersCopy[j].contains("-")) {
+						  break;
+					  }
+
+					  if ( Integer.valueOf(verseNumbersCopy[j]) >= Integer.valueOf(verseNumArr[0])  && Integer.valueOf(verseNumbersCopy[j]) <= Integer.valueOf(verseNumArr[1]) ) {
+						  verseNumbers.remove(verseNumbersCopy[j]);
+					  } else {
+						  break;
+					  }
+					}
+				}
+
+				//remove "2" if preceded by "1-2" or remove 21 and 23 when "20-23, 21, 22"
+				if (i < verseNumbersCopy.length - 1) {
+					for (int j = i + 1; j <= verseNumbersCopy.length - 1; j++)
+					{
+					  //int j = i - 1;
+					  if (verseNumbersCopy[j].contains("-")) {
+						  break;
+					  }
+					  
+					  if ( Integer.valueOf(verseNumbersCopy[j]) >= Integer.valueOf(verseNumArr[0])  && Integer.valueOf(verseNumbersCopy[j]) <= Integer.valueOf(verseNumArr[1]) ) {
+						  verseNumbers.remove(verseNumbersCopy[j]);
+					  } else {
+						  break;
+					  }
+					}
+				}
+			}
+			
+		
+		}
+		
 	}
 }
