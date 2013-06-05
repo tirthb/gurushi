@@ -29,209 +29,217 @@ import com.gurushi.service.VerseService;
 
 @Component
 public class VedaBaseDotNetGita extends ScriptureSource {
-	
-	public static final String SOURCE_URL_PREFIX = "http://vedabase.net/bg/"; 
+
+	public static final String SOURCE_URL_PREFIX = "http://vedabase.net/bg/";
 	final Logger logger = LoggerFactory.getLogger(VedaBaseDotNetGita.class);
-	
+
 	Author author;
 	List<Chapter> chapters = new ArrayList<Chapter>();
-	
+
 	@Autowired
 	VerseService vs;
-	
+
 	@Autowired
 	ChapterService cs;
-	
+
 	@Autowired
 	ScriptureService ss;
-	
-	//TODO:remove blank constructor
-	public VedaBaseDotNetGita() {}
-	
+
+	// TODO:remove blank constructor
+	public VedaBaseDotNetGita() {
+	}
+
 	public VedaBaseDotNetGita(String rootDirectory, Scripture sc) {
-		
+
 		super(rootDirectory, sc);
 	}
 
 	private List<Element> getMatchingChilds(Element parent, String tag) {
-		List<Element> found = new ArrayList<Element>();;
+		List<Element> found = new ArrayList<Element>();
+		;
 		Elements children = parent.children();
-		
+
 		int flag = 0;
-		
+
 		parent.childNodes().size();
-		
+
 		for (Element child : children) {
-		  //print("Child tag " + child.tagName());
-		  if (tag == null || (tag != null && child.tagName().matches(tag))) {
-			  found.add(child);
-			  flag = 1;
-		  }		  
-	
+			// print("Child tag " + child.tagName());
+			if (tag == null || (tag != null && child.tagName().matches(tag))) {
+				found.add(child);
+				flag = 1;
+			}
+
 		}
-		if(flag == 0) {
-		  print("FATAL ERROR: could not find the right tag: " + tag + "\n");
-		  return found;				
+		if (flag == 0) {
+			print("FATAL ERROR: could not find the right tag: " + tag + "\n");
+			return found;
 		}
-		
+
 		return found;
-		
+
 	}
-	
-	private List<Element> getMatchingChildsRange(Element parent, String tag, int start, int end) {
-		List<Element> found = new ArrayList<Element>();;
+
+	private List<Element> getMatchingChildsRange(Element parent, String tag,
+			int start, int end) {
+		List<Element> found = new ArrayList<Element>();
+		;
 		Elements children = parent.children();
 		int flag = 0;
-		
+
 		for (Element child : children) {
-		  //print("Child tag " + child.tagName());
-		  if (child.tagName().matches(tag)) {			  
-			  flag++;
-			  if (flag >= start && flag <=end) {
-			    found.add(child);
-			  }
-		  }
+			// print("Child tag " + child.tagName());
+			if (child.tagName().matches(tag)) {
+				flag++;
+				if (flag >= start && flag <= end) {
+					found.add(child);
+				}
+			}
 		}
-		if(flag == 0) {
-		  print("FATAL ERROR: could not find the right tag: " + tag + "\n");
-		  return found;				
+		if (flag == 0) {
+			print("FATAL ERROR: could not find the right tag: " + tag + "\n");
+			return found;
 		}
-		
+
 		return found;
-		
+
 	}
+
 	private Element findNthChild(Element parent, String tag, int num) {
-		
+
 		Elements children = parent.children();
 		int flag = 0;
 		Element found = null;
 		for (Element child : children) {
-		  //print("Child tag " + child.tagName());
-		  if (child.tagName().matches(tag)) {
-		    flag++;
-		    if (flag == num) {
-		    	found = child;
-		    	break;
-		    }
-		  }
+			// print("Child tag " + child.tagName());
+			if (child.tagName().matches(tag)) {
+				flag++;
+				if (flag == num) {
+					found = child;
+					break;
+				}
+			}
 		}
-		if(flag == 0) {
-		  print("FATAL ERROR: could not find the right tag: " + tag + "\n");
-		  return null;				
+		if (flag == 0) {
+			print("FATAL ERROR: could not find the right tag: " + tag + "\n");
+			return null;
 		}
-		
+
 		return found;
-		
+
 	}
-	
+
 	private String getChapterTitle(Element root) {
-		
+
 		Elements trs = root.select("tbody > tr");
 		Elements tds = trs.get(0).select("td");
 		Elements as = tds.get(0).select("a");
-		
-		
-		return as.get(0).text();		
-		
+
+		return as.get(0).text();
+
 	}
-	
-	private String parseContent(List<Element> ps, String sep_begin, String sep_end) {
+
+	private String parseContent(List<Element> ps, String sep_begin,
+			String sep_end) {
 		String content = "";
 		for (int i = 0; i < ps.size(); i++) {
 			String html = ps.get(i).html();
-			String html_text = Jsoup.parse(html).text();		
-			content = content + sep_begin + html_text + sep_end;	
+			String html_text = Jsoup.parse(html).text();
+			content = content + sep_begin + html_text + sep_end;
 
-		}		
-		return content;		
+		}
+		return content;
 	}
-	
-	private String getVerse(Element root) {   		
-		
+
+	private String getVerse(Element root) {
+
 		List<Element> verse_nodes = root.select("p.c");
-		return(parseContent(verse_nodes, "<p>", "</p>"));				
+		return (parseContent(verse_nodes, "<p>", "</p>"));
 	}
-	
+
 	private String getSynonyms(Element root) {
-   		
-		List<Element> p_t_nodes = root.select("p.t");		
+
+		List<Element> p_t_nodes = root.select("p.t");
 		List<Element> syn = new ArrayList<Element>();
 		if (p_t_nodes.get(0) != null) {
-		  Element trans = p_t_nodes.get(0).nextElementSibling();
-		  syn.add(trans);
-		  return(parseContent(syn, "", ""));
-		}        
-		return "";		
+			Element trans = p_t_nodes.get(0).nextElementSibling();
+			syn.add(trans);
+			return (parseContent(syn, "", ""));
+		}
+		return "";
 	}
-	
-    private String getTranslation(Element root) {
-		List<Element> p_t_nodes = root.select("p.t");		
+
+	private String getTranslation(Element root) {
+		List<Element> p_t_nodes = root.select("p.t");
 		List<Element> trans = new ArrayList<Element>();
 		if (p_t_nodes.get(1) != null) {
-		  Element translation = p_t_nodes.get(1).nextElementSibling();
-		  trans.add(translation);
-		  return(parseContent(trans, "<p>", "</p>"));
-		}        
+			Element translation = p_t_nodes.get(1).nextElementSibling();
+			trans.add(translation);
+			return (parseContent(trans, "<p>", "</p>"));
+		}
 		return "";
-   		
+
 	}
-    
-    private String getPurport(Element root) {
-		List<Element> p_t_nodes = root.select("p.t");		
+
+	private String getPurport(Element root) {
+		List<Element> p_t_nodes = root.select("p.t");
 		List<Element> purport = new ArrayList<Element>();
 		if (p_t_nodes.size() >= 3) {
-		  Element trans = p_t_nodes.get(2).nextElementSibling();			
-		  purport.add(trans);
-		  
-		  Element nextElement = trans;
-		  while ((nextElement = trans.nextElementSibling()) != null) {
-			 if (nextElement.hasClass("l")) break;
-			 trans = nextElement;
-		     purport.add(trans);
-		  }
-		  return(parseContent(purport, "<p>", "</p>"));
-		}        
+			Element trans = p_t_nodes.get(2).nextElementSibling();
+			purport.add(trans);
+
+			Element nextElement = trans;
+			while ((nextElement = trans.nextElementSibling()) != null) {
+				if (nextElement.hasClass("l"))
+					break;
+				trans = nextElement;
+				purport.add(trans);
+			}
+			return (parseContent(purport, "<p>", "</p>"));
+		}
 		return "";
 	}
-    
+
 	private void processVerse(Chapter ch, Verse verse, String file) {
 		File input = new File(file);
 		Document doc;
 		try {
 			doc = Jsoup.parse(input, "UTF-8", "");
-			
+
 			verse.setText(getVerse(doc.select("body").get(0)));
 			logger.debug("Verse: \n" + verse.getText());
-			
-			String sourceUrl = SOURCE_URL_PREFIX + ch.getNumber() + "/" + verse.getNumber() + "/en";
-			
+
+			String sourceUrl = SOURCE_URL_PREFIX + ch.getNumber() + "/"
+					+ verse.getNumber() + "/en";
+
 			Translation trans = new Translation(author);
 			trans.setText(getTranslation(doc.select("body").get(0)));
 			trans.setSourceUrl(sourceUrl);
-			
+
 			verse.setTranslation(trans);
-			
+
 			logger.debug("Translation: \n" + trans.getText());
 
 			String synonyms = getSynonyms(doc.select("body").get(0));
 			String[] words = synonyms.split(";");
-			
+
 			logger.debug("Meanings:");
 			for (int i = 0; i < words.length; i++) {
 				String word[] = words[i].split(" — ");
 				logger.debug(word[0] + " - " + word[1]);
 				verse.addMeaning(word[0], word[1], i);
 			}
-			
-			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, author);
-			verse.addCommentary(purport);	
-					
+
+			Commentary purport = new Commentary(getPurport(doc.select("body")
+					.get(0)), sourceUrl, author);
+			verse.addCommentary(purport);
+
 			logger.debug("Purport:\n" + purport.getText());
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void print(String msg, Object... args) {
@@ -249,7 +257,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		int chapter;
 		Chapter ch;
 		Chapter previousChapter = null;
-		
+
 		for (chapter = 1; chapter <= 18; chapter++) {
 
 			ch = new Chapter(Integer.toString(chapter), sc);
@@ -269,120 +277,122 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			previousChapter = ch;
 		}
 	}
-	
+
 	public void loadData() {
-		
+
 		try {
-			
-			author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
+
+			author = new Author(
+					"His Grace Bhakti Vedanta Swami Srila Prabhupada",
 					"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada");
-			
+
 			createChapters();
-			
+
 			int chapterIndex = 1;
 			Verse currentVerse = null, previousVerse = null;
-			
+
 			for (Chapter ch : chapters) {
-				
+
 				String chapterDirPath = rootDir + "/" + chapterIndex + "/";
-				
+
 				List<String> verseNumbers = getVerseNumbers(chapterDirPath);
-				
+
 				for (String verseNum : verseNumbers) {
-					
-					String verseFile = rootDir + "/" + chapterIndex + "/" + verseNum + "/en";
-					
+
+					String verseFile = rootDir + "/" + chapterIndex + "/"
+							+ verseNum + "/en";
+
 					logger.info("File Being Processed: " + verseFile);
-					logger.info("Chapter = " + chapterIndex + " Verse = " + verseNum);
-					
+					logger.info("Chapter = " + chapterIndex + " Verse = "+ verseNum);
+
 					File file = new File(verseFile);
-					
+
 					if (!file.exists()) {
-						logger.warn("File not found: " + file.getCanonicalPath());
+						logger.warn("File not found: "
+								+ file.getCanonicalPath());
 						continue;
 					}
-					
+
 					currentVerse = new Verse(verseNum, ch);
-					
+
 					processVerse(ch, currentVerse, verseFile);
-					
+
 					currentVerse = vs.save(currentVerse);
-					
-					//if first verse
+
+					// if first verse
 					if (verseNum.equals(verseNumbers.get(0))) {
-						
+
 						Document doc = Jsoup.parse(file, "UTF-8", "");
 						ch.setTitle(getChapterTitle(doc));
-						
+
 						ch.setFirstVerse(currentVerse);
 						ch = cs.save(ch);
 					}
-					
+
 					if (previousVerse != null) {
-						
+
 						previousVerse.setNextVerse(currentVerse);
 						previousVerse = vs.save(previousVerse);
 					}
-					
+
 					previousVerse = currentVerse;
-					
-					//if (verseNum.equals(verseNumbers.get(2))) break;
+
+					// if (verseNum.equals(verseNumbers.get(2))) break;
 				}
-				
-				//new chapter
+
+				// new chapter
 				previousVerse = null;
-				
+
 				chapterIndex++;
-				
-				//if (chapterIndex == 3) return;
+
+				// if (chapterIndex == 3) return;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
 	}
-	
+
 	private List<String> getVerseNumbers(String chapterDirPath) {
-		
+
 		List<String> verseNumbers = new ArrayList<String>();
-		
+
 		File chapterDir = new File(chapterDirPath);
-		
+
 		List<File> verseDirList = Arrays.asList(chapterDir.listFiles());
-		
+
 		for (File verseDir : verseDirList) {
-			if(verseDir.isDirectory()) {
+			if (verseDir.isDirectory()) {
 				verseNumbers.add(verseDir.getName());
 			}
 		}
-		
+
 		orderVerseNumbers(verseNumbers);
-		
+
 		return verseNumbers;
 	}
-	
+
 	private void orderVerseNumbers(List<String> verseNumbers) {
 
-		//sorting the verse numbers, please note some have dashes
-		Collections.sort(
-				verseNumbers, 
-				new Comparator<String>() {
-					@Override
-					public int compare(String o1, String o2) {
-						String[] o1Arr = o1.split("-");
-						o1 = o1Arr[0];
+		// sorting the verse numbers, please note some have dashes
+		Collections.sort(verseNumbers, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				String[] o1Arr = o1.split("-");
+				o1 = o1Arr[0];
 
-						String[] o2Arr = o2.split("-");
-						o2 = o2Arr[0];
+				String[] o2Arr = o2.split("-");
+				o2 = o2Arr[0];
 
-						return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
-					}
-				}
-			);
+				return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
+			}
+		});
 
-		//we would like to remove "21" if it is followed by "21,21-22". Also "2" if preceded by "1-2"
+		// we would like to remove "21" if it is followed by "21,21-22". Also
+		// "2" if preceded by "1-2"
 
-		String [] verseNumbersCopy = verseNumbers.toArray(new String[verseNumbers.size()]);
+		String[] verseNumbersCopy = verseNumbers
+				.toArray(new String[verseNumbers.size()]);
 
 		for (int i = 0; i < verseNumbersCopy.length; i++) {
 			String verseNumber = verseNumbersCopy[i];
@@ -390,27 +400,33 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			if (verseNumber.contains("-")) {
 				String[] verseNumArr = verseNumber.split("-");
 
-				//remove "21" if it is followed by "21,21-22" or remove 25 and 26 if followed by "25,26,25-28"
+				// remove "21" if it is followed by "21,21-22" or remove 25 and
+				// 26 if followed by "25,26,25-28"
 				if (i > 1) {
 					int j = i - 1;
-					while( !verseNumbersCopy[j].contains("-") 
-							&& Integer.valueOf(verseNumArr[0]) - 1 != Integer.valueOf(verseNumbersCopy[j])) {
+					while (!verseNumbersCopy[j].contains("-")
+							&& Integer.valueOf(verseNumArr[0]) - 1 != Integer
+									.valueOf(verseNumbersCopy[j])) {
 
 						verseNumbers.remove(verseNumbersCopy[j]);
 						j--;
-						if (j == 0) break;
+						if (j == 0)
+							break;
 					}
 				}
 
-				//remove "2" if preceded by "1-2" or remove 21 and 23 when "20-23, 21, 22"
+				// remove "2" if preceded by "1-2" or remove 21 and 23 when
+				// "20-23, 21, 22"
 				if (i < verseNumbersCopy.length - 1) {
 					int j = i + 1;
-					while( !verseNumbersCopy[j].contains("-") 
-							&& Integer.valueOf(verseNumArr[1]) + 1 != Integer.valueOf(verseNumbersCopy[j])) {
+					while (!verseNumbersCopy[j].contains("-")
+							&& Integer.valueOf(verseNumArr[1]) + 1 != Integer
+									.valueOf(verseNumbersCopy[j])) {
 
 						verseNumbers.remove(verseNumbersCopy[j]);
 						j++;
-						if (j == verseNumbersCopy.length) break;
+						if (j == verseNumbersCopy.length)
+							break;
 					}
 				}
 			}

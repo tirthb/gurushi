@@ -21,7 +21,8 @@
     </bean>
     
     <bean id="vedaBaseDotNetGita" class="com.gurushi.loader.VedaBaseDotNetGita" scope="singleton">
-         <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" />
+         <!-- <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" /> -->
+         <property name="rootDir" value="F:\Dropbox\vedabase.net\bg" />
     </bean>
     
 </beans>
