@@ -26,12 +26,12 @@
 	</bean>
 	
 	<bean id="vedaBaseDotNetGita" class="com.gurushi.loader.VedaBaseDotNetGita" scope="singleton">
-<!--          <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" /> -->
-              <property name="rootDir" value="F:\Dropbox\vedabase.net\bg" />
+              <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" />
+<!--          <property name="rootDir" value="F:\Dropbox\vedabase.net\bg" /> -->
     </bean>
 	<bean id="BhagavadGitaDotOrg" class="com.gurushi.loader.BhagavadGitaDotOrg" scope="singleton">
-<!--          <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" /> -->
-              <property name="rootDir" value="F:/Dropbox/www.bhagavad-gita.org/Gita" />
+              <property name="rootDir" value="/Users/tirthomishtu/gurushi/www.bhagavad-gita.org/Gita" />
+<!--          <property name="rootDir" value="F:/Dropbox/www.bhagavad-gita.org/Gita" /> -->
     </bean>
 	
 </beans>
