@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-    <classpathentry kind="src" path="src/main/resources"/>
-    <classpathentry kind="src" path="src/test/java"/>
-    <classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/gurushi-common"/>
+	<classpathentry kind="lib" path="../lib/jersey-bundle-1.17.1.jar"/>
+	<classpathentry kind="lib" path="../lib/jersey-spring-1.17.1.jar"/>
+	<classpathentry kind="lib" path="../lib/logback-classic-1.0.6.jar"/>
+    <classpathentry kind="lib" path="../lib/logback-core-1.0.6.jar"/>
+    <classpathentry kind="lib" path="../lib/slf4j-api-1.7.1.jar"/>
+    <classpathentry kind="lib" path="../lib/grizzly-servlet-webserver-2.0.0-M3.jar"/>
+    <classpathentry kind="lib" path="../lib/spring-aop-3.2.1.RELEASE.jar"/>
+    <classpathentry kind="lib" path="../lib/spring-beans-3.2.1.RELEASE.jar"/>
+    <classpathentry kind="lib" path="../lib/spring-context-3.2.1.RELEASE.jar"/>
+    <classpathentry kind="lib" path="../lib/spring-core-3.2.1.RELEASE.jar"/>
+    <classpathentry kind="lib" path="../lib/spring-web-3.2.1.RELEASE.jar"/>
+    <classpathentry kind="lib" path="../lib/jackson-core-asl-1.9.2.jar"/>
+    <classpathentry kind="lib" path="../lib/jackson-jaxrs-1.9.2.jar"/>
+    <classpathentry kind="lib" path="../lib/jackson-mapper-asl-1.9.2.jar"/>
+    <classpathentry kind="lib" path="../lib/jackson-xc-1.9.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
