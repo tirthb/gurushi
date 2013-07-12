@@ -18,11 +18,6 @@ package com.gurushi.data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
-/**
- * Base class for document classes.
- * 
- * @author Oliver Gierke
- */
 public class AbstractDocument {
 
 	@Id
@@ -36,7 +31,11 @@ public class AbstractDocument {
 	public ObjectId getId() {
 		return id;
 	}
-
+	
+	public String getTextId() {
+		return id == null ? null : id.toString();
+	}
+	
 	/* 
 	 * (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)

@@ -5,6 +5,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import com.gurushi.data.Chapter;
+import com.gurushi.data.ChapterMini;
 import com.gurushi.data.Scripture;
 
 public interface ChapterService {
@@ -12,6 +13,8 @@ public interface ChapterService {
 	public Chapter save(Chapter c);
 	
 	public List<Chapter> getAllChaptersForAScripture(Scripture s);
+	
+	public List<ChapterMini> getAllChapterMinisForAScripture(Scripture s);
 	
 	public Chapter previousChapter(Chapter c);
 	

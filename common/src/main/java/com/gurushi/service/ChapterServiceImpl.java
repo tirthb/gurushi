@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gurushi.data.Chapter;
+import com.gurushi.data.ChapterMini;
 import com.gurushi.data.Scripture;
 import com.gurushi.data.repository.ChapterRepository;
 
@@ -39,6 +40,17 @@ public class ChapterServiceImpl implements ChapterService {
 		}
 		
 		return chapters;
+	}
+	
+	public List<ChapterMini> getAllChapterMinisForAScripture(Scripture s) {
+		List<Chapter> allChapters = getAllChaptersForAScripture(s);
+		
+		List<ChapterMini> allChapterMinis = new ArrayList<ChapterMini>();
+		for (Chapter ch : allChapters) {
+	        allChapterMinis.add(new ChapterMini(ch.getId().toString(), ch.getNumber(), ch.getTitle()));
+        }
+		
+		return allChapterMinis;
 	}
 
 	@Override
