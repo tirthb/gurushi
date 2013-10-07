@@ -1,4 +1,6 @@
-package com.gurushi.data;
+package com.gurushi.data.to;
+
+import com.gurushi.data.Chapter;
 
 public class ChapterMini {
 	
@@ -10,6 +12,12 @@ public class ChapterMini {
 		this.id = id;
 	    this.number = number;
 	    this.title = title;
+    }
+	
+	public ChapterMini(Chapter ch) {
+		this.id = ch.getId() == null ? null : ch.getId().toString();
+	    this.number = ch.getNumber();
+	    this.title = ch.getTitle();
     }
 
 	public String getNumber() {

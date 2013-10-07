@@ -9,15 +9,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gurushi.data.Chapter;
-import com.gurushi.data.ChapterMini;
 import com.gurushi.data.Scripture;
 import com.gurushi.data.repository.ChapterRepository;
+import com.gurushi.data.repository.VerseRepository;
+import com.gurushi.data.to.ChapterMini;
 
 @Service
 public class ChapterServiceImpl implements ChapterService {
 	
 	@Autowired
 	private ChapterRepository rep;
+	
+	@Autowired
+	private VerseRepository vs;
 	
 	@Override
 	@Transactional
@@ -36,7 +40,9 @@ public class ChapterServiceImpl implements ChapterService {
 		}
 		
 		for (ObjectId chapterId : chapterIds) {
-			chapters.add(rep.findOne(chapterId));
+			Chapter ch = rep.findOne(chapterId);
+			chapters.add(ch);
+			
 		}
 		
 		return chapters;

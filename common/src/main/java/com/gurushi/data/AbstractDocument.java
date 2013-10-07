@@ -21,7 +21,7 @@ import org.springframework.data.annotation.Id;
 public class AbstractDocument {
 
 	@Id
-	private ObjectId id;
+	protected ObjectId id;
 
 	/**
 	 * Returns the identifier of the document.

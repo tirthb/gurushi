@@ -5,8 +5,8 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import com.gurushi.data.Chapter;
-import com.gurushi.data.ChapterMini;
 import com.gurushi.data.Scripture;
+import com.gurushi.data.to.ChapterMini;
 
 public interface ChapterService {
 
