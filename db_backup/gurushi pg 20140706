@@ -1,0 +1,1146 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.3
+-- Dumped by pg_dump version 9.3.1
+-- Started on 2014-07-06 14:10:20 PDT
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 196 (class 3079 OID 12018)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2367 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 178 (class 1259 OID 16602)
+-- Name: audio; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE audio (
+    title text,
+    url text,
+    sort_order integer,
+    verse_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.audio OWNER TO gurushi;
+
+--
+-- TOC entry 180 (class 1259 OID 16678)
+-- Name: audio_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE audio_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.audio_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2368 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: audio_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE audio_id_seq OWNED BY audio.id;
+
+
+--
+-- TOC entry 170 (class 1259 OID 16503)
+-- Name: author; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE author (
+    name text,
+    wikipedia_url text,
+    sampradaya text,
+    sort_order integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.author OWNER TO gurushi;
+
+--
+-- TOC entry 181 (class 1259 OID 16687)
+-- Name: author_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE author_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.author_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2369 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: author_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE author_id_seq OWNED BY author.id;
+
+
+--
+-- TOC entry 172 (class 1259 OID 16515)
+-- Name: chapter; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE chapter (
+    number text,
+    title text,
+    description text,
+    sort_order integer,
+    scripture_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.chapter OWNER TO gurushi;
+
+--
+-- TOC entry 182 (class 1259 OID 16696)
+-- Name: chapter_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE chapter_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.chapter_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2370 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: chapter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE chapter_id_seq OWNED BY chapter.id;
+
+
+--
+-- TOC entry 173 (class 1259 OID 16521)
+-- Name: commentary; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE commentary (
+    verse_id integer,
+    text text,
+    source_url text,
+    author_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.commentary OWNER TO gurushi;
+
+--
+-- TOC entry 183 (class 1259 OID 16705)
+-- Name: commentary_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE commentary_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.commentary_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2371 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: commentary_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE commentary_id_seq OWNED BY commentary.id;
+
+
+--
+-- TOC entry 190 (class 1259 OID 16850)
+-- Name: lookup_type; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE lookup_type (
+    id integer NOT NULL,
+    type text
+);
+
+
+ALTER TABLE public.lookup_type OWNER TO gurushi;
+
+--
+-- TOC entry 191 (class 1259 OID 16856)
+-- Name: lookup_value; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE lookup_value (
+    id integer NOT NULL,
+    name text,
+    sort_order integer,
+    is_active boolean,
+    lookup_type_id integer
+);
+
+
+ALTER TABLE public.lookup_value OWNER TO gurushi;
+
+--
+-- TOC entry 174 (class 1259 OID 16527)
+-- Name: meaning; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE meaning (
+    word text,
+    meaning text,
+    sort_order integer,
+    verse_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.meaning OWNER TO gurushi;
+
+--
+-- TOC entry 184 (class 1259 OID 16714)
+-- Name: meaning_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE meaning_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.meaning_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2372 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: meaning_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE meaning_id_seq OWNED BY meaning.id;
+
+
+--
+-- TOC entry 171 (class 1259 OID 16509)
+-- Name: scripture; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE scripture (
+    name text,
+    id integer NOT NULL,
+    description text
+);
+
+
+ALTER TABLE public.scripture OWNER TO gurushi;
+
+--
+-- TOC entry 185 (class 1259 OID 16723)
+-- Name: scripture_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE scripture_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.scripture_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2373 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: scripture_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE scripture_id_seq OWNED BY scripture.id;
+
+
+--
+-- TOC entry 175 (class 1259 OID 16533)
+-- Name: translation; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE translation (
+    text text,
+    source_url text,
+    verse_id integer,
+    author_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.translation OWNER TO gurushi;
+
+--
+-- TOC entry 186 (class 1259 OID 16732)
+-- Name: translation_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE translation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.translation_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2374 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: translation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE translation_id_seq OWNED BY translation.id;
+
+
+--
+-- TOC entry 176 (class 1259 OID 16539)
+-- Name: verse; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE verse (
+    number_range text,
+    sort_order integer,
+    id integer NOT NULL,
+    chapter_id integer
+);
+
+
+ALTER TABLE public.verse OWNER TO gurushi;
+
+--
+-- TOC entry 187 (class 1259 OID 16741)
+-- Name: verse_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE verse_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.verse_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2375 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: verse_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE verse_id_seq OWNED BY verse.id;
+
+
+--
+-- TOC entry 193 (class 1259 OID 16874)
+-- Name: verse_line; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE verse_line (
+    verse_id integer,
+    line text,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.verse_line OWNER TO gurushi;
+
+--
+-- TOC entry 195 (class 1259 OID 16915)
+-- Name: verse_line_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE verse_line_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.verse_line_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2376 (class 0 OID 0)
+-- Dependencies: 195
+-- Name: verse_line_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE verse_line_id_seq OWNED BY verse_line.id;
+
+
+--
+-- TOC entry 192 (class 1259 OID 16866)
+-- Name: verse_number; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE verse_number (
+    verse_id integer,
+    number integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.verse_number OWNER TO gurushi;
+
+--
+-- TOC entry 194 (class 1259 OID 16908)
+-- Name: verse_number_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE verse_number_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.verse_number_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2377 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: verse_number_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE verse_number_id_seq OWNED BY verse_number.id;
+
+
+--
+-- TOC entry 177 (class 1259 OID 16589)
+-- Name: video; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE video (
+    title text,
+    url text,
+    sort_order integer,
+    verse_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.video OWNER TO gurushi;
+
+--
+-- TOC entry 188 (class 1259 OID 16750)
+-- Name: video_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE video_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.video_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2378 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: video_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE video_id_seq OWNED BY video.id;
+
+
+--
+-- TOC entry 179 (class 1259 OID 16622)
+-- Name: vocal; Type: TABLE; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE TABLE vocal (
+    title text,
+    url text,
+    verse_id integer,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.vocal OWNER TO gurushi;
+
+--
+-- TOC entry 189 (class 1259 OID 16759)
+-- Name: vocal_id_seq; Type: SEQUENCE; Schema: public; Owner: gurushi
+--
+
+CREATE SEQUENCE vocal_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.vocal_id_seq OWNER TO gurushi;
+
+--
+-- TOC entry 2379 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: vocal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: gurushi
+--
+
+ALTER SEQUENCE vocal_id_seq OWNED BY vocal.id;
+
+
+--
+-- TOC entry 2184 (class 2604 OID 16680)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY audio ALTER COLUMN id SET DEFAULT nextval('audio_id_seq'::regclass);
+
+
+--
+-- TOC entry 2176 (class 2604 OID 16689)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY author ALTER COLUMN id SET DEFAULT nextval('author_id_seq'::regclass);
+
+
+--
+-- TOC entry 2178 (class 2604 OID 16698)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY chapter ALTER COLUMN id SET DEFAULT nextval('chapter_id_seq'::regclass);
+
+
+--
+-- TOC entry 2179 (class 2604 OID 16707)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY commentary ALTER COLUMN id SET DEFAULT nextval('commentary_id_seq'::regclass);
+
+
+--
+-- TOC entry 2180 (class 2604 OID 16716)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY meaning ALTER COLUMN id SET DEFAULT nextval('meaning_id_seq'::regclass);
+
+
+--
+-- TOC entry 2177 (class 2604 OID 16725)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY scripture ALTER COLUMN id SET DEFAULT nextval('scripture_id_seq'::regclass);
+
+
+--
+-- TOC entry 2181 (class 2604 OID 16734)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY translation ALTER COLUMN id SET DEFAULT nextval('translation_id_seq'::regclass);
+
+
+--
+-- TOC entry 2182 (class 2604 OID 16743)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY verse ALTER COLUMN id SET DEFAULT nextval('verse_id_seq'::regclass);
+
+
+--
+-- TOC entry 2187 (class 2604 OID 16917)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY verse_line ALTER COLUMN id SET DEFAULT nextval('verse_line_id_seq'::regclass);
+
+
+--
+-- TOC entry 2186 (class 2604 OID 16910)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY verse_number ALTER COLUMN id SET DEFAULT nextval('verse_number_id_seq'::regclass);
+
+
+--
+-- TOC entry 2183 (class 2604 OID 16752)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY video ALTER COLUMN id SET DEFAULT nextval('video_id_seq'::regclass);
+
+
+--
+-- TOC entry 2185 (class 2604 OID 16761)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY vocal ALTER COLUMN id SET DEFAULT nextval('vocal_id_seq'::regclass);
+
+
+--
+-- TOC entry 2342 (class 0 OID 16602)
+-- Dependencies: 178
+-- Data for Name: audio; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY audio (title, url, sort_order, verse_id, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2380 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: audio_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('audio_id_seq', 2, true);
+
+
+--
+-- TOC entry 2334 (class 0 OID 16503)
+-- Dependencies: 170
+-- Data for Name: author; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY author (name, wikipedia_url, sampradaya, sort_order, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2381 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('author_id_seq', 1, true);
+
+
+--
+-- TOC entry 2336 (class 0 OID 16515)
+-- Dependencies: 172
+-- Data for Name: chapter; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY chapter (number, title, description, sort_order, scripture_id, id) FROM stdin;
+\N	Preface	Originally I wrote Bhagavad-gītā As It Is in the form in which it is presented now.	\N	10	11
+\N	Introduction	Bhagavad-gītā is also known as Gītopaniṣad. It is the essence of Vedic knowledge and one of the most important Upaniṣads in Vedic literature.	\N	10	12
+1	Observing the Armies on the Battlefield of Kurukṣetra	\N	\N	10	13
+\.
+
+
+--
+-- TOC entry 2382 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: chapter_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('chapter_id_seq', 13, true);
+
+
+--
+-- TOC entry 2337 (class 0 OID 16521)
+-- Dependencies: 173
+-- Data for Name: commentary; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY commentary (verse_id, text, source_url, author_id, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2383 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: commentary_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('commentary_id_seq', 5, true);
+
+
+--
+-- TOC entry 2354 (class 0 OID 16850)
+-- Dependencies: 190
+-- Data for Name: lookup_type; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY lookup_type (id, type) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2355 (class 0 OID 16856)
+-- Dependencies: 191
+-- Data for Name: lookup_value; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY lookup_value (id, name, sort_order, is_active, lookup_type_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2338 (class 0 OID 16527)
+-- Dependencies: 174
+-- Data for Name: meaning; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY meaning (word, meaning, sort_order, verse_id, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2384 (class 0 OID 0)
+-- Dependencies: 184
+-- Name: meaning_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('meaning_id_seq', 1, false);
+
+
+--
+-- TOC entry 2335 (class 0 OID 16509)
+-- Dependencies: 171
+-- Data for Name: scripture; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY scripture (name, id, description) FROM stdin;
+Bhagavad Gita	10	Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.
+\.
+
+
+--
+-- TOC entry 2385 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: scripture_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('scripture_id_seq', 10, true);
+
+
+--
+-- TOC entry 2339 (class 0 OID 16533)
+-- Dependencies: 175
+-- Data for Name: translation; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY translation (text, source_url, verse_id, author_id, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2386 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: translation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('translation_id_seq', 1, false);
+
+
+--
+-- TOC entry 2340 (class 0 OID 16539)
+-- Dependencies: 176
+-- Data for Name: verse; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY verse (number_range, sort_order, id, chapter_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2387 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: verse_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('verse_id_seq', 1, true);
+
+
+--
+-- TOC entry 2357 (class 0 OID 16874)
+-- Dependencies: 193
+-- Data for Name: verse_line; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY verse_line (verse_id, line, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2388 (class 0 OID 0)
+-- Dependencies: 195
+-- Name: verse_line_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('verse_line_id_seq', 1, false);
+
+
+--
+-- TOC entry 2356 (class 0 OID 16866)
+-- Dependencies: 192
+-- Data for Name: verse_number; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY verse_number (verse_id, number, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2389 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: verse_number_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('verse_number_id_seq', 1, false);
+
+
+--
+-- TOC entry 2341 (class 0 OID 16589)
+-- Dependencies: 177
+-- Data for Name: video; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY video (title, url, sort_order, verse_id, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2390 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: video_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('video_id_seq', 1, false);
+
+
+--
+-- TOC entry 2343 (class 0 OID 16622)
+-- Dependencies: 179
+-- Data for Name: vocal; Type: TABLE DATA; Schema: public; Owner: gurushi
+--
+
+COPY vocal (title, url, verse_id, id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2391 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: vocal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: gurushi
+--
+
+SELECT pg_catalog.setval('vocal_id_seq', 1, true);
+
+
+--
+-- TOC entry 2206 (class 2606 OID 16770)
+-- Name: audio_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY audio
+    ADD CONSTRAINT audio_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2189 (class 2606 OID 16772)
+-- Name: author_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY author
+    ADD CONSTRAINT author_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2193 (class 2606 OID 16774)
+-- Name: chapter_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY chapter
+    ADD CONSTRAINT chapter_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2195 (class 2606 OID 16781)
+-- Name: commentary_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY commentary
+    ADD CONSTRAINT commentary_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2210 (class 2606 OID 16863)
+-- Name: lookup_type_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY lookup_type
+    ADD CONSTRAINT lookup_type_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2212 (class 2606 OID 16865)
+-- Name: lookup_value_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY lookup_value
+    ADD CONSTRAINT lookup_value_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2197 (class 2606 OID 16783)
+-- Name: meaning_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY meaning
+    ADD CONSTRAINT meaning_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2191 (class 2606 OID 16785)
+-- Name: scripture_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY scripture
+    ADD CONSTRAINT scripture_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2199 (class 2606 OID 16792)
+-- Name: translation_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY translation
+    ADD CONSTRAINT translation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2202 (class 2606 OID 16794)
+-- Name: verse_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY verse
+    ADD CONSTRAINT verse_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2204 (class 2606 OID 16796)
+-- Name: video_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY video
+    ADD CONSTRAINT video_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2208 (class 2606 OID 16803)
+-- Name: vocal_pkey; Type: CONSTRAINT; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+ALTER TABLE ONLY vocal
+    ADD CONSTRAINT vocal_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2200 (class 1259 OID 16890)
+-- Name: fki_verse_fk; Type: INDEX; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE INDEX fki_verse_fk ON verse USING btree (chapter_id);
+
+
+--
+-- TOC entry 2213 (class 1259 OID 16902)
+-- Name: fki_verse_number_verse_fk; Type: INDEX; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE INDEX fki_verse_number_verse_fk ON verse_number USING btree (verse_id);
+
+
+--
+-- TOC entry 2214 (class 1259 OID 16896)
+-- Name: fki_verse_text_verse_fk; Type: INDEX; Schema: public; Owner: gurushi; Tablespace: 
+--
+
+CREATE INDEX fki_verse_text_verse_fk ON verse_line USING btree (verse_id);
+
+
+--
+-- TOC entry 2223 (class 2606 OID 16809)
+-- Name: audio_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY audio
+    ADD CONSTRAINT audio_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2215 (class 2606 OID 16925)
+-- Name: chapter_scripture_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY chapter
+    ADD CONSTRAINT chapter_scripture_fk FOREIGN KEY (scripture_id) REFERENCES scripture(id);
+
+
+--
+-- TOC entry 2216 (class 2606 OID 16775)
+-- Name: commentary_author_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY commentary
+    ADD CONSTRAINT commentary_author_fk FOREIGN KEY (author_id) REFERENCES author(id);
+
+
+--
+-- TOC entry 2217 (class 2606 OID 16819)
+-- Name: commentary_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY commentary
+    ADD CONSTRAINT commentary_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2218 (class 2606 OID 16824)
+-- Name: meaning_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY meaning
+    ADD CONSTRAINT meaning_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2219 (class 2606 OID 16786)
+-- Name: translation_author_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY translation
+    ADD CONSTRAINT translation_author_fk FOREIGN KEY (author_id) REFERENCES author(id);
+
+
+--
+-- TOC entry 2220 (class 2606 OID 16829)
+-- Name: translation_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY translation
+    ADD CONSTRAINT translation_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2221 (class 2606 OID 16903)
+-- Name: verse_chapter_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY verse
+    ADD CONSTRAINT verse_chapter_fk FOREIGN KEY (chapter_id) REFERENCES chapter(id);
+
+
+--
+-- TOC entry 2225 (class 2606 OID 16897)
+-- Name: verse_number_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY verse_number
+    ADD CONSTRAINT verse_number_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2226 (class 2606 OID 16891)
+-- Name: verse_text_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY verse_line
+    ADD CONSTRAINT verse_text_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2222 (class 2606 OID 16797)
+-- Name: video_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY video
+    ADD CONSTRAINT video_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2224 (class 2606 OID 16804)
+-- Name: vocal_verse_fk; Type: FK CONSTRAINT; Schema: public; Owner: gurushi
+--
+
+ALTER TABLE ONLY vocal
+    ADD CONSTRAINT vocal_verse_fk FOREIGN KEY (verse_id) REFERENCES verse(id);
+
+
+--
+-- TOC entry 2366 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: tirthomishtu
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM tirthomishtu;
+GRANT ALL ON SCHEMA public TO tirthomishtu;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2014-07-06 14:10:20 PDT
+
+--
+-- PostgreSQL database dump complete
+--
+

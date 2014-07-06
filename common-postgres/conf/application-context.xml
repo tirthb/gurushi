@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+	   	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+ 		xmlns:jee="http://www.springframework.org/schema/jee"
+ 		xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-3.2.xsd
+							http://www.springframework.org/schema/tx
+							http://www.springframework.org/schema/tx/spring-tx.xsd
+							http://www.springframework.org/schema/jee
+							http://www.springframework.org/schema/jee/spring-jee-3.2.xsd 
+							http://www.springframework.org/schema/data/jpa 
+							http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
+
+<!-- Activates various annotations to be detected in bean classes -->
+<context:annotation-config />
+
+<context:component-scan base-package="com.gurushi" />
+ <bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
+
+<context:property-placeholder location="classpath:gurushi.properties"/>
+
+	<bean id="mainDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+	   <property name="driverClass" value="${DB_DRIVER}" />
+	   <property name="jdbcUrl" value="${DB_URL}" />
+	   <property name="username" value="${DB_USER}"/>
+	   <property name="password" value="${DB_PWD}"/>
+	   <property name="idleConnectionTestPeriod" value="10"/>
+	   <property name="idleMaxAge" value="60"/>
+	   <property name="maxConnectionsPerPartition" value="30"/>
+	   <property name="minConnectionsPerPartition" value="10"/>
+	   <property name="partitionCount" value="3"/>
+	   <property name="acquireIncrement" value="5"/>
+	   <property name="statementsCacheSize" value="100"/>
+	   <property name="releaseHelperThreads" value="3"/>
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	   <property name="dataSource" ref="mainDataSource"/>
+    </bean>
+	<!-- 
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+  		<property name="dataSource" ref="mainDataSource"/>
+	</bean>
+	 -->
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
+        <property name="packagesToScan" value="com.gurushi.domain"></property> 
+        <!-- mappingResources for Named Queries -->   
+        <property name="mappingResources">
+	      <list>
+	        <value>com/gurushi/queries/Lookup.xml</value>
+	        <value>com/gurushi/queries/Chapter.xml</value>
+	        <value>com/gurushi/queries/Scripture.xml</value>
+	        <value>com/gurushi/queries/Verse.xml</value>
+	      </list>
+	    </property>
+	   
+        <property name="dataSource" ref="mainDataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" >
+                <property name="showSql" value="true"/>
+                <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect"></property>
+                
+            </bean>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+ 
+</beans>
