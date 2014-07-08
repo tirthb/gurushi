@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="author")
-public class Author extends AbstractEntityAssigned {
+public class Author extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
     
@@ -21,6 +21,19 @@ public class Author extends AbstractEntityAssigned {
 	
 	@Column(name="sort_order")
 	private Integer sortOrder;
+	
+	public Author() {}
+	
+	public Author(String name, String wikiUrl, String sampradaya) {
+		this.name = name;
+		this.wikipediaUrl = wikiUrl;
+		this.sampradaya = sampradaya;
+	}
+	
+	public Author(String name, String wikiUrl) {
+		this.name = name;
+		this.wikipediaUrl = wikiUrl;
+	}
 
 	public String getName() {
 		return name;

@@ -13,19 +13,26 @@ public class VerseNumber extends AbstractEntity {
     private static final long serialVersionUID = 1L;
     
     @Column(name="number")
-	private String number;
+	private Integer number;
     
 	@ManyToOne
 	@JoinColumn(name="verse_id")
 	private Verse verse;
 	
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
+	public VerseNumber() {}
+	
+	public VerseNumber(Integer number, Verse v) {
 		this.number = number;
+		this.verse = v;
 	}
 	
+	public Integer getNumber() {
+		return number;
+	}
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
 	public Verse getVerse() {
 		return verse;
 	}

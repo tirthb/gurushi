@@ -25,6 +25,15 @@ public class Meaning extends AbstractEntity {
 	@JoinColumn(name="verse_id")
 	private Verse verse;
 	
+	public Meaning() {}
+	
+	public Meaning(String word, String meaning, Integer sortOrder, Verse v) {
+		this.word = word;
+		this.meaning = meaning;
+		this.sortOrder = sortOrder;
+		this.verse = v;
+	}
+	
 	public String getWord() {
 		return word;
 	}

@@ -25,6 +25,15 @@ public class Audio extends AbstractEntity {
 	@JoinColumn(name="verse_id")
 	private Verse verse;
 	
+	public Audio() {}
+	
+	public Audio(String title, String url, Integer sortOrder, Verse v) {
+		this.title = title;
+		this.url = url;
+		this.sortOrder = sortOrder;
+		this.verse = v;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

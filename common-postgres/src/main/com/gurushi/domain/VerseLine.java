@@ -19,6 +19,13 @@ public class VerseLine extends AbstractEntity {
 	@JoinColumn(name="verse_id")
 	private Verse verse;
 	
+	public VerseLine() {}
+	
+	public VerseLine(Verse v, String line) {
+		this.verse = v;
+		this.line = line;
+	}
+	
 	public String getLine() {
 		return line;
 	}

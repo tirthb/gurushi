@@ -1,5 +1,6 @@
 package com.gurushi.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -37,20 +38,42 @@ public class Verse extends AbstractEntity {
 	 * Please numbers can be Roman numeric for some scriptures, so they are string.
 	 * The purpose of this field is to fetch easily.
 	 */
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "verse")
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true, mappedBy = "verse")
 	private List<VerseNumber> verseNumbers;
 	
 	/**
 	 * one line of a verse, we need a separator to display e.g. <br/> 
 	 */
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "verse")
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval = true, mappedBy = "verse")
 	private List<VerseLine> verseLines;
+	
+	public Verse() {}
+	
+	public Verse(String numberRange, Chapter c) {
+		this.numberRange = numberRange;
+		this.chapter = c;
+	}
 	
 	public String getNumberRange() {
 		return numberRange;
 	}
 	public void setNumberRange(String numberRange) {
 		this.numberRange = numberRange;
+		
+		if(!numberRange.contains("-")) {
+			addVerseNumber(new VerseNumber(Integer.parseInt(numberRange), this));
+		} else {
+			String[] numbers = numberRange.split("\\-\\s+");
+			if (numbers.length != 2) {
+				throw new IllegalStateException("number range can be of the format x or x-y");
+			}
+			int start = Integer.parseInt(numbers[0]);
+			int end = Integer.parseInt(numbers[1]);
+			
+			for (int i = start; i <= end; i++) {
+				addVerseNumber(new VerseNumber(i, this));
+            }
+		}
 	}
 	
 	public Integer getSortOrder() {
@@ -70,8 +93,14 @@ public class Verse extends AbstractEntity {
 	public List<VerseNumber> getVerseNumbers() {
 		return verseNumbers;
 	}
-	public void setVerseNumbers(List<VerseNumber> verseNumbers) {
+	void setVerseNumbers(List<VerseNumber> verseNumbers) {
 		this.verseNumbers = verseNumbers;
+	}
+	public void addVerseNumber(VerseNumber verseNumber) {
+		if (verseNumbers == null) {
+			verseNumbers = new ArrayList<VerseNumber>();
+		}
+		verseNumbers.add(verseNumber);
 	}
 	
 	public void setVerseLines(List<VerseLine> verseLines) {
@@ -79,6 +108,12 @@ public class Verse extends AbstractEntity {
 	}
 	public List<VerseLine> getVerseLines() {
 		return verseLines;
+	}
+	public void addVerseLine(VerseLine verseLine) {
+		if (verseLines == null) {
+			verseLines = new ArrayList<VerseLine>();
+		}
+		verseLines.add(verseLine);
 	}
 		
 	@Override

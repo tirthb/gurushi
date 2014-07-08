@@ -26,6 +26,13 @@ public class Translation extends AbstractEntity {
 	@JoinColumn(name="verse_id")
 	private Verse verse;
 	
+	public Translation() {}
+	
+	public Translation(Author a, Verse v) {
+		this.author = a;
+		this.verse = v;
+	}
+	
 	public String getSourceUrl() {
 		return sourceUrl;
 	}

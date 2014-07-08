@@ -18,9 +18,6 @@ public class Commentary extends AbstractEntity {
     @Column(name="source_url")
 	private String sourceUrl;
 	
-	@Column(name="sort_order")
-	private Integer sortOrder;
-	
 	@ManyToOne
 	@JoinColumn(name="verse_id")
 	private Verse verse;
@@ -28,6 +25,15 @@ public class Commentary extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name="author_id")
 	private Author author;
+	
+	public Commentary() {}
+	
+	public Commentary(String text, String sourceUrl, Verse v, Author a) {
+		this.text = text;
+		this.sourceUrl = sourceUrl;
+		this.verse = v;
+		this.author = a;
+	}
 	
 	public String getText() {
 		return text;
@@ -41,13 +47,6 @@ public class Commentary extends AbstractEntity {
 	}
 	public void setSourceUrl(String sourceUrl) {
 		this.sourceUrl = sourceUrl;
-	}
-	
-	public Integer getSortOrder() {
-		return sortOrder;
-	}
-	public void setSortOrder(Integer sortOrder) {
-		this.sortOrder = sortOrder;
 	}
 	
 	public Author getAuthor() {
