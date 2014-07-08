@@ -15,15 +15,19 @@ public class VerseLine extends AbstractEntity {
     @Column(name="line")
 	private String line;
     
+    @Column(name="sort_order")
+    private Integer sortOrder;
+    
 	@ManyToOne
 	@JoinColumn(name="verse_id")
 	private Verse verse;
 	
 	public VerseLine() {}
 	
-	public VerseLine(Verse v, String line) {
+	public VerseLine(Verse v, String line, Integer sortOrder) {
 		this.verse = v;
 		this.line = line;
+		this.sortOrder = sortOrder;
 	}
 	
 	public String getLine() {
@@ -38,6 +42,13 @@ public class VerseLine extends AbstractEntity {
 	}
 	public void setVerse(Verse verse) {
 		this.verse = verse;
+	}
+	
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 	@Override

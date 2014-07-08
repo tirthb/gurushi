@@ -81,11 +81,11 @@ public class AbstractTest {
 		v1 = new Verse("1", c1);
 		
 		List<VerseLine> lines = new ArrayList<VerseLine>();
-		lines.add(new VerseLine(v1, "dhṛtarāṣṭra uvāca"));
-		lines.add(new VerseLine(v1, "dharma-kṣetre kuru-kṣetre"));
-		lines.add(new VerseLine(v1, "samavetā yuyutsavaḥ"));
-		lines.add(new VerseLine(v1, "māmakāḥ pāṇḍavāś caiva"));
-		lines.add(new VerseLine(v1, "kim akurvata sañjaya"));
+		lines.add(new VerseLine(v1, "dhṛtarāṣṭra uvāca", 10));
+		lines.add(new VerseLine(v1, "dharma-kṣetre kuru-kṣetre", 20));
+		lines.add(new VerseLine(v1, "samavetā yuyutsavaḥ", 30));
+		lines.add(new VerseLine(v1, "māmakāḥ pāṇḍavāś caiva", 40));
+		lines.add(new VerseLine(v1, "kim akurvata sañjaya", 50));
 		
 		v1.setVerseLines(lines);
 		v1 = utilDao.save(v1);
@@ -127,8 +127,8 @@ public class AbstractTest {
 				, a3);
 		utilDao.save(com);
 		
-		utilDao.save(new Meaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said", 1, v1));
-		utilDao.save(new Meaning("dharma-kṣetre", "in the place of pilgrimage", 2, v1));
+		utilDao.save(new Meaning("dhṛtarāṣṭraḥ uvāca", "King Dhṛtarāṣṭra said", 10, v1));
+		utilDao.save(new Meaning("dharma-kṣetre", "in the place of pilgrimage", 20, v1));
 		
 		utilDao.save(new Audio("SP BG 01-01 London 1973-07-07 The Material World Means--etc", 
 				"http://audio.iskcondesiretree.info/01_-_His_Divine_Grace_A_C_Bhaktivedanta_Swami_Srila_Prabhupada/Lectures/English/Bhagavad_Gita/Chapter-01/SP_BG_01-01_London_1973-07-07_The_Material_World_Means--etc.mp3"
@@ -139,14 +139,14 @@ public class AbstractTest {
 		
 		//Adding another verse
 		
-		v2 = new Verse("2", c1);
+		v2 = new Verse(" 2 -5 ", c1);
 		
 		lines = new ArrayList<VerseLine>();
-		lines.add(new VerseLine(v1, "sañjaya uvāca"));
-		lines.add(new VerseLine(v1, "dṛṣṭvā tu pāṇḍavānīkam"));
-		lines.add(new VerseLine(v1, "vyūḍhaḿ duryodhanas tadā"));
-		lines.add(new VerseLine(v1, "ācāryam upasańgamya"));
-		lines.add(new VerseLine(v1, "rājā vacanam abravīt"));
+		lines.add(new VerseLine(v1, "sañjaya uvāca", 10));
+		lines.add(new VerseLine(v1, "dṛṣṭvā tu pāṇḍavānīkam", 20));
+		lines.add(new VerseLine(v1, "vyūḍhaḿ duryodhanas tadā", 30));
+		lines.add(new VerseLine(v1, "ācāryam upasańgamya", 40));
+		lines.add(new VerseLine(v1, "rājā vacanam abravīt", 50));
 		
 		v2.setVerseLines(lines);
 		
@@ -180,8 +180,8 @@ public class AbstractTest {
 				, a3);
 		utilDao.save(com);
 		
-		utilDao.save(new Meaning("sañjayaḥ uvāca", "Sañjaya said", 1, v2));
-		utilDao.save(new Meaning("dṛṣṭvā", "after seeing", 2, v2));
+		utilDao.save(new Meaning("sañjayaḥ uvāca", "Sañjaya said", 10, v2));
+		utilDao.save(new Meaning("dṛṣṭvā", "after seeing", 20, v2));
 		
 		utilDao.save(new Audio("SP BG 01-02 London 1973-07-09 Death Is God" 
 				, "http://audio.iskcondesiretree.info/01_-_His_Divine_Grace_A_C_Bhaktivedanta_Swami_Srila_Prabhupada/Lectures/English/Bhagavad_Gita/Chapter-01/SP_BG_01-02_London_1973-07-09_Death_Is_God.mp3"

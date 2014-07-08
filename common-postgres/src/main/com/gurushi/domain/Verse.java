@@ -50,7 +50,7 @@ public class Verse extends AbstractEntity {
 	public Verse() {}
 	
 	public Verse(String numberRange, Chapter c) {
-		this.numberRange = numberRange;
+		setNumberRange(numberRange);
 		this.chapter = c;
 	}
 	
@@ -58,12 +58,13 @@ public class Verse extends AbstractEntity {
 		return numberRange;
 	}
 	public void setNumberRange(String numberRange) {
+		numberRange = numberRange.trim();
 		this.numberRange = numberRange;
 		
 		if(!numberRange.contains("-")) {
 			addVerseNumber(new VerseNumber(Integer.parseInt(numberRange), this));
 		} else {
-			String[] numbers = numberRange.split("\\-\\s+");
+			String[] numbers = numberRange.split("( +)?\\-( +)?");
 			if (numbers.length != 2) {
 				throw new IllegalStateException("number range can be of the format x or x-y");
 			}
