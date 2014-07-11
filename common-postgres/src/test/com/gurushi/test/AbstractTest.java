@@ -53,6 +53,8 @@ public class AbstractTest {
 		createChapters();
 		createVerses();
 		
+		logger.info("finished test setup.");
+		
 	}
 	
 	private void createScripture() {

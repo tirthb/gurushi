@@ -5,6 +5,6 @@ import com.gurushi.domain.Verse;
 
 public interface VerseDao {
 
-	public Verse findByNumberAndChapter(String number, Chapter c);
+	public Verse findByNumberAndChapter(Integer number, Chapter c);
 	
 }

@@ -9,4 +9,5 @@ public interface ChapterDao {
 
 	public List<Chapter> findAllChaptersForAScripture(Scripture s);
 	
+	public Chapter findChapterByNumber(String number, Scripture s);
 }

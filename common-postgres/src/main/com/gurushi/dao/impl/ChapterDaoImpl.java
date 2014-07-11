@@ -1,6 +1,8 @@
 package com.gurushi.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +19,8 @@ public class ChapterDaoImpl implements ChapterDao {
     
     @PersistenceContext
     private EntityManager em;
+    
+    private Map<String/*number*/, Chapter> cache = new HashMap<String, Chapter>();
 
 	@SuppressWarnings("unchecked")
     @Override
@@ -24,8 +28,20 @@ public class ChapterDaoImpl implements ChapterDao {
 		
 		Query query = em.createNamedQuery("findAllChaptersForAScripture");
         query.setParameter("sid", s.getId());
+        
+        List<Chapter> list = query.getResultList();
+        
+        cache.clear();
+        for (Chapter c : list) {
+	        cache.put(c.getNumber(), c);
+        }
 		
-	    return query.getResultList();
+	    return list;
     }
+	
+	public Chapter findChapterByNumber(String number, Scripture s) {
+		if (cache.isEmpty()) findAllChaptersForAScripture(s);
+		return cache.get(number);
+	}
 
 }

@@ -15,9 +15,9 @@ public class VerseDaoImpl implements VerseDao {
     
     @PersistenceContext
     private EntityManager em;
-
+    
 	@Override
-    public Verse findByNumberAndChapter(String number, Chapter c) {
+    public Verse findByNumberAndChapter(Integer number, Chapter c) {
 		
 		Query query = em.createNamedQuery("findByNumberAndChapter");
         query.setParameter("number", number);

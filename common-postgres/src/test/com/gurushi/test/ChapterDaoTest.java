@@ -1,8 +1,9 @@
 package com.gurushi.test;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +28,10 @@ public class ChapterDaoTest extends AbstractTest {
 		Scripture s = sdao.findByName("Bhagavad Gita");
 		List<Chapter> chapters = dao.findAllChaptersForAScripture(s);
 		
-		Assert.assertEquals(3, chapters.size());
+		assertEquals(3, chapters.size());
 		
 		for (Chapter chapter : chapters) {
-			Assert.assertNotNull(chapter.getId());
+			assertNotNull(chapter.getId());
 		}
 	}
     
