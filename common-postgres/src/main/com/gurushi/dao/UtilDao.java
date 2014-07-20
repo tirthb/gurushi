@@ -7,5 +7,7 @@ public interface UtilDao {
     public <E extends AbstractEntity> E save(E e);
     
     public <E extends AbstractEntity> E find(Class<E> genericType, Integer id);
+    
+    public void cleanUpTables();
 
 }

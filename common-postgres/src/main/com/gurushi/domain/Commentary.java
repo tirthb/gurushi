@@ -13,7 +13,7 @@ public class Commentary extends AbstractEntity {
     private static final long serialVersionUID = 1L;
     
     @Column(name="text")
-	private String text;
+	private String purport;
     
     @Column(name="source_url")
 	private String sourceUrl;
@@ -28,18 +28,18 @@ public class Commentary extends AbstractEntity {
 	
 	public Commentary() {}
 	
-	public Commentary(String text, String sourceUrl, Verse v, Author a) {
-		this.text = text;
+	public Commentary(String purport, String sourceUrl, Verse v, Author a) {
+		this.purport = purport;
 		this.sourceUrl = sourceUrl;
 		this.verse = v;
 		this.author = a;
 	}
 	
-	public String getText() {
-		return text;
+	public String getPurport() {
+		return purport;
 	}
-	public void setText(String text) {
-		this.text = text;
+	public void setPurport(String purport) {
+		this.purport = purport;
 	}
 	
 	public String getSourceUrl() {

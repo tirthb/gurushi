@@ -1,6 +1,6 @@
 package com.gurushi.loader;
 
-import com.gurushi.data.Scripture;
+import com.gurushi.domain.Scripture;
 
 public abstract class ScriptureSource {
 	

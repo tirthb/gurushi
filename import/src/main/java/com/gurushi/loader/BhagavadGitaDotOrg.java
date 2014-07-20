@@ -14,16 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gurushi.data.Author;
-import com.gurushi.data.Chapter;
-import com.gurushi.data.Scripture;
-import com.gurushi.data.Verse;
-import com.gurushi.data.Commentary;
-
-import com.gurushi.service.ChapterService;
-import com.gurushi.service.ScriptureService;
-import com.gurushi.service.TemplateService;
-import com.gurushi.service.VerseService;
+import com.gurushi.dao.ChapterDao;
+import com.gurushi.dao.ScriptureDao;
+import com.gurushi.dao.UtilDao;
+import com.gurushi.dao.VerseDao;
+import com.gurushi.domain.Author;
+import com.gurushi.domain.Chapter;
+import com.gurushi.domain.Commentary;
+import com.gurushi.domain.Scripture;
+import com.gurushi.domain.Verse;
 
 public class BhagavadGitaDotOrg extends ScriptureSource {
 	public static final String SOURCE_URL_PREFIX = "http://www.bhagavad-gita.org/Gita";
@@ -33,16 +32,16 @@ public class BhagavadGitaDotOrg extends ScriptureSource {
 	List<Chapter> chapters = new ArrayList<Chapter>();
 
 	@Autowired
-	VerseService vs;
+	VerseDao vdao;
 
 	@Autowired
-	ChapterService cs;
+	ChapterDao cdao;
 
 	@Autowired
-	ScriptureService ss;
+	ScriptureDao sdao;
 	
 	@Autowired
-	TemplateService ts;	
+	UtilDao utilDao;	
 
 	Author authorSridhara;
 	Author authorMadhava;
@@ -181,7 +180,7 @@ public class BhagavadGitaDotOrg extends ScriptureSource {
 			
             String purport = "";
         	
-        	Chapter ch = cs.findByNumberAndScripture(Integer.toString(chapter), sc);
+        	Chapter ch = cdao.findByNumberAndScripture(Integer.toString(chapter), sc);
         	
         	if (ch == null) {
         		print("ERROR: Count not locate Chapter object \n");
@@ -195,81 +194,46 @@ public class BhagavadGitaDotOrg extends ScriptureSource {
         	String sourceUrl ="";
         	
         	
-        	v = vs.findByNumberAndChapter(Integer.toString(verse), ch);     	 
+        	v = vdao.findByNumberAndChapter(verse, ch);     	 
         	
-	        while (v == null) {
-	        	  count++;
-	        	  verse_search = Integer.toString(verse) + "-" +  Integer.toString(verse+count);
-	        	  
-	        	  v = vs.findByNumberAndChapter(verse_search, ch);
-	        	  if (v != null) {
-	        		  start_group_verse = verse;
-	        		  end_group_verse = verse + count;
-	        		  verse_offset = verse_offset + count  - 1;
-	        		  //sourceUrl = SOURCE_URL_PREFIX + "/verse-" + chapter_s + "-" + start_group_verse + ".html";	
-	        		  break;
-	        	  }      		
-	        	  
-	        	  if (count == 20) {	        		  
-	        		  print("ERROR: Count not locate Verse object \n");
-	        		  System.exit(1);
-	        	  } 		  	                     	       	  
-        	}
+	        //TODO: need to find the file for the corresponding verse range
         	     	
-        	
-        	//if (count == 0) {        			
         	sourceUrl = SOURCE_URL_PREFIX + "/verse-" + chapter_s + "-" + Integer.toString(verse - verse_offset)  + ".html";     		
-        	//}
-        	
-        	
         	
 			Element commentary1 = FindNthChild(commentaries12.get(0), "center", 1);
 			if (commentary1 != null) {				
-			  print("Commentary 1: " + commentary1.text());
+			  logger.debug("Commentary 1: " + commentary1.text());
 			  purport = getPurport(commentaries12.get(0));
-			  Commentary bySridharSwami = new Commentary(purport, sourceUrl, authorSridhara);
-			  bySridharSwami.setVerse(v.getId());
-			  ts.save(bySridharSwami);
+			  Commentary bySridharSwami = new Commentary(purport, sourceUrl, v, authorSridhara);
+			  utilDao.save(bySridharSwami);
 
-			  v.addCommentary(bySridharSwami);
-			  vs.save(v);			  
 			}
 
 			Element commentary2 = FindNthChild(commentaries12.get(1), "center", 1);
 			if (commentary2 != null) {
 			  print("Commentary 2: " + commentary2.text());
 			  purport = getPurport(commentaries12.get(1));
-			  Commentary byMadhavaAcharya = new Commentary(purport, sourceUrl, authorMadhava);
-			  byMadhavaAcharya.setVerse(v.getId());
-			  ts.save(byMadhavaAcharya);			  
+			  Commentary byMadhavaAcharya = new Commentary(purport, sourceUrl, v, authorMadhava);
+			  utilDao.save(byMadhavaAcharya);			  
 
-			  v.addCommentary(byMadhavaAcharya);
-			  vs.save(v);			  
 			}
 			
 			Element commentary3 = FindNthChild(commentaries34.get(0), "center", 1);
 			if (commentary3 != null) {				
 			  print("Commentary 3: " + commentary3.text());
 			  purport = getPurport(commentaries34.get(0));
-			  Commentary byRamanujaAcharya = new Commentary(purport, sourceUrl, authorRamanuja);
-			  byRamanujaAcharya.setVerse(v.getId());
-			  ts.save(byRamanujaAcharya);			  
+			  Commentary byRamanujaAcharya = new Commentary(purport, sourceUrl, v, authorRamanuja);
+			  utilDao.save(byRamanujaAcharya);			  
 			  
-			  v.addCommentary(byRamanujaAcharya);
-			  vs.save(v);			  
 			}
 
 			Element commentary4 = FindNthChild(commentaries34.get(1), "center", 1);
 			if (commentary4 != null) {
 			  print("Commentary 4: " + commentary4.text());
 			  purport = getPurport(commentaries34.get(1));
+			  Commentary byKesavaKashmiri = new Commentary(purport, sourceUrl, v, authorKesava);
+			  utilDao.save(byKesavaKashmiri);	
 			  
-			  Commentary byKesavaKashmiri = new Commentary(purport, sourceUrl, authorKesava);
-			  byKesavaKashmiri.setVerse(v.getId());
-			  ts.save(byKesavaKashmiri);	
-			  
-			  v.addCommentary(byKesavaKashmiri);
-			  vs.save(v);			  			  
 			}
 
 		} catch (IOException e) {

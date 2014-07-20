@@ -1,7 +1,7 @@
 package com.gurushi.loader;
 
 
-import com.gurushi.data.Scripture;
+import com.gurushi.domain.Scripture;
 
 public class MainContentLoading {
 	public static void main(String[] args) {

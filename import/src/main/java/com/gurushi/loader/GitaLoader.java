@@ -3,18 +3,18 @@ package com.gurushi.loader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.gurushi.data.Scripture;
-import com.gurushi.service.ScriptureService;
-import com.gurushi.service.TemplateService;
+import com.gurushi.dao.ScriptureDao;
+import com.gurushi.dao.UtilDao;
+import com.gurushi.domain.Scripture;
 
 @Component
 public class GitaLoader {
 	
 	@Autowired
-	TemplateService ts;
+	UtilDao utilDao;
 	
 	@Autowired
-	ScriptureService service;
+	ScriptureDao sdao;
 	
 	//TODO:pass constructor arg
 	@Autowired
@@ -27,12 +27,12 @@ public class GitaLoader {
 
 	public void createAndLoadScripture() {
 		
-		ts.cleanUpDb();
+		utilDao.cleanUpTables();
 
 		gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
 		
-		gita = service.save(gita);
+		gita = utilDao.save(gita);
 		
 		//File currentDir = new File("F:/Dropbox/www.bhagavad-gita.org/Gita"); // current directory
 		//File currentDir = new File("/Users/nileshvaghela/Dropbox/www.bhagavad-gita.org/Gita"); // current directory

@@ -39,7 +39,7 @@ public class ChapterDaoImpl implements ChapterDao {
 	    return list;
     }
 	
-	public Chapter findChapterByNumber(String number, Scripture s) {
+	public Chapter findByNumberAndScripture(String number, Scripture s) {
 		if (cache.isEmpty()) findAllChaptersForAScripture(s);
 		return cache.get(number);
 	}

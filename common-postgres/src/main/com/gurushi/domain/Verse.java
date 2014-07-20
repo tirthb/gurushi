@@ -116,6 +116,15 @@ public class Verse extends AbstractEntity {
 		}
 		verseLines.add(verseLine);
 	}
+	public void setVerseLines(String [] lines) {
+		if (verseLines != null) {
+			verseLines.clear();
+		}
+		
+		for (int i = 0; i < lines.length; i++) {
+	        addVerseLine(new VerseLine(this, lines[i], i+1));
+        }
+	}
 		
 	@Override
     public String toString() {

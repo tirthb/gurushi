@@ -29,7 +29,7 @@ public class VerseDaoTest extends AbstractTest {
     public void findByNumberAndChapter() {
     	
     	Scripture s = sdao.findByName("Bhagavad Gita");
-		Chapter c = cdao.findChapterByNumber("1", s);
+		Chapter c = cdao.findByNumberAndScripture("1", s);
 		
     	Verse verse = dao.findByNumberAndChapter(5, c);
     	

@@ -17,16 +17,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.gurushi.data.Author;
-import com.gurushi.data.Chapter;
-import com.gurushi.data.Commentary;
-import com.gurushi.data.Scripture;
-import com.gurushi.data.Translation;
-import com.gurushi.data.Verse;
-import com.gurushi.service.ChapterService;
-import com.gurushi.service.ScriptureService;
-import com.gurushi.service.TemplateService;
-import com.gurushi.service.VerseService;
+import com.gurushi.dao.ChapterDao;
+import com.gurushi.dao.ScriptureDao;
+import com.gurushi.dao.UtilDao;
+import com.gurushi.dao.VerseDao;
+import com.gurushi.domain.Author;
+import com.gurushi.domain.Chapter;
+import com.gurushi.domain.Commentary;
+import com.gurushi.domain.Meaning;
+import com.gurushi.domain.Scripture;
+import com.gurushi.domain.Translation;
+import com.gurushi.domain.Verse;
 
 @Component
 public class VedaBaseDotNetGita extends ScriptureSource {
@@ -38,16 +39,16 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 	List<Chapter> chapters = new ArrayList<Chapter>();
 	
 	@Autowired
-	VerseService vs;
+	VerseDao vdao;
 	
 	@Autowired
-	ChapterService cs;
+	ChapterDao cdao;
 	
 	@Autowired
-	ScriptureService ss;
+	ScriptureDao sdao;
 	
 	@Autowired
-	TemplateService ts;
+	UtilDao utilDao;
 	
 	//TODO:remove blank constructor
 	public VedaBaseDotNetGita() {}
@@ -150,10 +151,22 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		return content;		
 	}
 	
-	private String getVerse(Element root) {   		
+	private List<String> getVisibleText(List<Element> ps) {
+		List<String> content = new ArrayList<String>();
+		for (int i = 0; i < ps.size(); i++) {
+			String html = ps.get(i).html();
+			String html_text = Jsoup.parse(html).text();		
+			content.add(html_text);	
+
+		}		
+		return content;		
+	}
+	
+	private String[] getVerseLines(Element root) {   		
 		
 		List<Element> verse_nodes = root.select("p.c");
-		return(parseContent(verse_nodes, "<p>", "</p>"));				
+		List<String> lines = getVisibleText(verse_nodes);	
+		return lines.toArray(new String [lines.size()]);
 	}
 	
 	private String getSynonyms(Element root) {
@@ -204,16 +217,20 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 		try {
 			doc = Jsoup.parse(input, "UTF-8", "");
 			
-			verse.setText(getVerse(doc.select("body").get(0)));
-			logger.debug("Verse: \n" + verse.getText());
+			verse.setVerseLines(getVerseLines(doc.select("body").get(0)));
+			logger.debug("Verse: \n" + verse.getVerseLines().get(0));
 			
-			String sourceUrl = SOURCE_URL_PREFIX + ch.getNumber() + "/" + verse.getNumber() + "/en";
+			//saving verse
+			verse = utilDao.save(verse);
 			
-			Translation trans = new Translation(author);
+			String sourceUrl = SOURCE_URL_PREFIX + ch.getNumber() + "/" + verse.getNumberRange() + "/en";
+			
+			Translation trans = new Translation(author, verse);
 			trans.setText(getTranslation(doc.select("body").get(0)));
 			trans.setSourceUrl(sourceUrl);
 			
-			verse.setTranslation(trans);
+			//saving trans
+			trans = utilDao.save(trans);
 			
 			logger.debug("Translation: \n" + trans.getText());
 
@@ -222,21 +239,19 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			
 			logger.debug("Meanings:");
 			for (int i = 0; i < words.length; i++) {
-				String word[] = words[i].split(" Ñ ");
+				String word[] = words[i].split(" â€” ");
 				logger.debug(word[0] + " - " + word[1]);
-				verse.addMeaning(word[0], word[1]);
+				
+				//saving meaning
+				utilDao.save(new Meaning(word[0], word[1], i+1, verse));
 			}
 			
-			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, author);
-			ts.save(purport);
+			Commentary purport = new Commentary(getPurport(doc.select("body").get(0)), sourceUrl, verse, author);
 			
-			verse.addCommentary(purport);
-			vs.save(verse);
+			//saving commentary
+			purport = utilDao.save(purport);
 			
-			purport.setVerse(verse.getId());
-			ts.save(purport);
-					
-			logger.debug("Purport:\n" + purport.getText());
+			logger.debug("Purport:\n" + purport.getPurport());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -258,31 +273,14 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 	private void createChapters() {
 		int chapter;
 		Chapter ch;
-		Chapter previousChapter = null;
 		
 		for (chapter = 1; chapter <= 18; chapter++) {
 
 			ch = new Chapter(Integer.toString(chapter), sc);
-
-			if (previousChapter != null) {
-				ch.setPreviousChapter(previousChapter.getId());
-				ch = cs.save(ch);
-				
-				previousChapter.setNextChapter(ch.getId());
-				cs.save(previousChapter);
-				
-			} else {
-				ch = cs.save(ch);
-			}
+			ch = utilDao.save(ch);
 			
-			sc.addChapter(ch.getId());
-
 			chapters.add(ch);
-			
-			previousChapter = ch;
 		}
-		
-		sc = ss.save(sc);
 	}
 	
 	public void loadData() {
@@ -295,7 +293,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			createChapters();
 			
 			int chapterIndex = 1;
-			Verse currentVerse = null, previousVerse = null;
+			Verse currentVerse = null;
 			
 			for (Chapter ch : chapters) {
 				
@@ -320,16 +318,6 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 					currentVerse = new Verse(verseNum, ch);
 					processVerse(ch, currentVerse, verseFile);
 					
-					if (previousVerse != null) {
-						currentVerse.setPreviousVerse(previousVerse.getId());
-						currentVerse = vs.save(currentVerse);
-						
-						previousVerse.setNextVerse(currentVerse.getId());
-						vs.save(previousVerse);
-					}
-					
-					ch.addVerse(currentVerse.getId());
-					
 					//if first verse, set the title
 					if (verseNum.equals(verseNumbers.get(0))) {
 						
@@ -337,15 +325,10 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 						ch.setTitle(getChapterTitle(doc));
 					}
 					
-					previousVerse = currentVerse;
+					ch = utilDao.save(ch);
 					
 					//if (verseNum.equals(verseNumbers.get(2))) break;
 				}
-				
-				//new chapter
-				previousVerse = null;
-				
-				ch = cs.save(ch);
 				
 				chapterIndex++;
 				

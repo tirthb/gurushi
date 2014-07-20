@@ -37,6 +37,6 @@
 	<classpathentry kind="lib" path="../lib/spring-expression-3.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="../lib/spring-test-3.2.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="../lib/spring-tx-3.2.1.RELEASE.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/gurushi-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/gurushi-common-pg"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -47,7 +47,7 @@ public class AbstractTest {
 	@Before
 	public void setUp() {
 		
-		testDao.cleanupTables();
+		testDao.cleanUpTables();
 		
 		createScripture();
 		createChapters();
