@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class App {
 	public static void main(String[] args) throws Exception {
 
-		ApplicationContext appContext = new ClassPathXmlApplicationContext("META-INF/spring/application-context.xml");
+		ApplicationContext appContext = new ClassPathXmlApplicationContext("application-context.xml");
 		GitaLoader gitaLoader = (GitaLoader) appContext.getBean("gitaLoader");
 		gitaLoader.createAndLoadScripture();
 		

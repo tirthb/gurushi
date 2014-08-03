@@ -24,7 +24,7 @@ import com.gurushi.domain.Verse;
 import com.gurushi.domain.VerseLine;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/application-context.xml" })
+@ContextConfiguration(locations = { "/data-context.xml" })
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class AbstractTest {
 	

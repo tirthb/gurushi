@@ -31,13 +31,13 @@ public class Chapter extends AbstractEntity {
 	public Chapter() {}
 	
 	public Chapter(String number, String title, Scripture s) {
-		this.number = number;
+		setNumber(number);
 		this.title = title;
 		this.scripture = s;
 	}
 	
 	public Chapter(String number, Scripture s) {
-		this.number = number;
+		setNumber(number);
 		this.scripture = s;
 	}
 
@@ -46,6 +46,7 @@ public class Chapter extends AbstractEntity {
 	}
 	public void setNumber(String number) {
 		this.number = number;
+		this.sortOrder = Integer.parseInt(number);
 	}
 	
 	public String getTitle() {

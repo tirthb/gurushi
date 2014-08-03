@@ -59,10 +59,6 @@ public class BhagavadGitaDotOrg extends ScriptureSource {
 
 	public BhagavadGitaDotOrg(String rootDirectory, Scripture sc) {		
 		super(rootDirectory, sc);	 
-			
-		
-		
-		
 	}
 
 	private List<Element> GetMatchingChilds(Element parent, String tag) {
@@ -254,9 +250,17 @@ public class BhagavadGitaDotOrg extends ScriptureSource {
 
 	public void loadData() {
 		authorSridhara = new Author("Sridhar Swami", "http://en.wikipedia.org/wiki/Shreedhar_Swami");
+		authorSridhara = utilDao.save(authorSridhara);
+		
 		authorMadhava = new Author("Madhava Acharya", "http://en.wikipedia.org/wiki/Madhvacharya");
+		authorMadhava = utilDao.save(authorMadhava);
+		
 		authorRamanuja = new Author("Ramanuja Acharya", "http://en.wikipedia.org/wiki/Ramanuja");
-		authorKesava = new Author("Kesave Kashmiri Swami", "http://www.harekrsna.com/philosophy/gss/sadhu/sampradayas/kumara/kumara.htm");		
+		authorRamanuja = utilDao.save(authorRamanuja);
+		
+		authorKesava = new Author("Kesava Kashmiri Swami", "http://www.harekrsna.com/philosophy/gss/sadhu/sampradayas/kumara/kumara.htm");
+		authorKesava = utilDao.save(authorKesava);
+		
 		try {
 			int chapter;
 			for (chapter = 1; chapter <= 18; chapter++) {

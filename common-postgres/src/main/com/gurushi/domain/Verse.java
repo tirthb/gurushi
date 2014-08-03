@@ -63,6 +63,7 @@ public class Verse extends AbstractEntity {
 		
 		if(!numberRange.contains("-")) {
 			addVerseNumber(new VerseNumber(Integer.parseInt(numberRange), this));
+			this.sortOrder = Integer.parseInt(numberRange);
 		} else {
 			String[] numbers = numberRange.split("( +)?\\-( +)?");
 			if (numbers.length != 2) {
@@ -70,6 +71,8 @@ public class Verse extends AbstractEntity {
 			}
 			int start = Integer.parseInt(numbers[0]);
 			int end = Integer.parseInt(numbers[1]);
+			
+			this.sortOrder = start;
 			
 			for (int i = start; i <= end; i++) {
 				addVerseNumber(new VerseNumber(i, this));
