@@ -1,8 +1,12 @@
-
 .DS_Store
 
 *.class
-
 *.log
-
 *.log.*
+
+root/.project
+root/.settings
+
+gita-loader/.project
+gita-loader/.settings
+

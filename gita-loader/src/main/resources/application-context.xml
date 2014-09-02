@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+		
+	<import resource="classpath:data-context.xml" />
+	
+	<bean id="vedaBaseDotNetGita" class="com.gurushi.loader.VedaBaseDotNetGita" scope="singleton">
+              <property name="rootDir" value="/Users/tirthomishtu/gurushi/vedabase.net-bg" />
+<!--          <property name="rootDir" value="F:\Dropbox\vedabase.net\bg" /> -->
+    </bean>
+	<bean id="BhagavadGitaDotOrg" class="com.gurushi.loader.BhagavadGitaDotOrg" scope="singleton">
+              <property name="rootDir" value="/Users/tirthomishtu/gurushi/www.bhagavad-gita.org/Gita" />
+<!--          <property name="rootDir" value="F:/Dropbox/www.bhagavad-gita.org/Gita" /> -->
+    </bean>
+	
+</beans>

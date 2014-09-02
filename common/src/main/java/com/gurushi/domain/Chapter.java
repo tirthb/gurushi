@@ -48,6 +48,10 @@ public class Chapter extends AbstractEntity {
 	public Chapter(String number, String title, Scripture s) {
 		this(null, number, title, s);
 	}
+	
+	public Chapter(String number, Scripture s) {
+		this(null, number, null, s);
+	}
 
 	public String getNumber() {
 		return number;
