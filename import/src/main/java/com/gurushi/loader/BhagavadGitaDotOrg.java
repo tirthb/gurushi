@@ -249,16 +249,16 @@ public class BhagavadGitaDotOrg extends ScriptureSource {
 	}
 
 	public void loadData() {
-		authorSridhara = new Author("Sridhar Swami", "http://en.wikipedia.org/wiki/Shreedhar_Swami");
+		authorSridhara = new Author("Sridhar Swami", "http://en.wikipedia.org/wiki/Shreedhar_Swami", "Rudra Vaisnava Sampradaya");
 		authorSridhara = utilDao.save(authorSridhara);
 		
-		authorMadhava = new Author("Madhava Acharya", "http://en.wikipedia.org/wiki/Madhvacharya");
+		authorMadhava = new Author("Madhava Acharya", "http://en.wikipedia.org/wiki/Madhvacharya","Brahma Vaisnava Sampradaya");
 		authorMadhava = utilDao.save(authorMadhava);
 		
-		authorRamanuja = new Author("Ramanuja Acharya", "http://en.wikipedia.org/wiki/Ramanuja");
+		authorRamanuja = new Author("Ramanuja Acharya", "http://en.wikipedia.org/wiki/Ramanuja", "Sri Vaisnava Sampradaya");
 		authorRamanuja = utilDao.save(authorRamanuja);
 		
-		authorKesava = new Author("Kesava Kashmiri Swami", "http://www.harekrsna.com/philosophy/gss/sadhu/sampradayas/kumara/kumara.htm");
+		authorKesava = new Author("Kesava Kashmiri Swami", "http://www.harekrsna.com/philosophy/gss/sadhu/sampradayas/kumara/kumara.htm", "Kumara Vaisnava Sampradaya");
 		authorKesava = utilDao.save(authorKesava);
 		
 		try {

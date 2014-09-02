@@ -289,7 +289,7 @@ public class VedaBaseDotNetGita extends ScriptureSource {
 			
 			author = new Author("His Grace Bhakti Vedanta Swami Srila Prabhupada", 
 					"http://en.wikipedia.org/wiki/A._C._Bhaktivedanta_Swami_Prabhupada",
-					"Gaudiya Vaisnava");
+					"Gaudiya Vaisnava Sampradaya");
 			author.setSortOrder(10);
 			
 			author = utilDao.save(author);

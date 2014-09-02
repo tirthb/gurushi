@@ -1,4 +1,4 @@
-package com.gurushi.test;
+package com.gurushi.dao;
 
 import junit.framework.Assert;
 

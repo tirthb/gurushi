@@ -29,12 +29,12 @@ public class GitaLoader {
 	@Transactional
 	public void createAndLoadScripture() {
 		
-		/*utilDao.cleanUpTables();
+		utilDao.cleanUpTables();
 
 		gita = new Scripture("Bhagavad Gita");
 		gita.setDescription("Lord Krishna clears the doubts of Arjuna in the middle of a battlefield.");
 		
-		gita = utilDao.save(gita);*/
+		gita = utilDao.save(gita);
 		
 		//File currentDir = new File("F:/Dropbox/www.bhagavad-gita.org/Gita"); // current directory
 		//File currentDir = new File("/Users/nileshvaghela/Dropbox/www.bhagavad-gita.org/Gita"); // current directory
@@ -42,8 +42,8 @@ public class GitaLoader {
 		//File currentDir = new File("F:/Dropbox/vedabase.net/bg"); // current directory
 		
 		//rootDir defined in application-context.xml
-		/*vbSource.setScripture(gita);		
-		vbSource.loadData();*/
+		vbSource.setScripture(gita);		
+		vbSource.loadData();
 		
 		gita = sdao.findByName("Bhagavad Gita");
 

@@ -1,4 +1,4 @@
-package com.gurushi.test;
+package com.gurushi.dao;
 
 import static org.junit.Assert.*;
 

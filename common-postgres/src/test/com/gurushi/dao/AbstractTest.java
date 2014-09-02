@@ -1,11 +1,12 @@
-package com.gurushi.test;
+package com.gurushi.dao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -28,7 +29,7 @@ import com.gurushi.domain.VerseLine;
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
 public class AbstractTest {
 	
-	private static Logger logger = Logger.getLogger(AbstractTest.class);
+	private static Logger logger = LoggerFactory.getLogger(AbstractTest.class);
 	
 	public static final String LS = System.getProperty("line.separator");
 	
